@@ -7,9 +7,9 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import Image from "next/image";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { FlagSubmission } from "@/app/submit/flag-submission";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import FlagSubmissionPopover from "@/app/submit/flag-submission-popover";
 
 export default function RenderQuestions({ slug }: { slug: string }) {
 
@@ -21,7 +21,7 @@ export default function RenderQuestions({ slug }: { slug: string }) {
           .join(' ')}
       </h1>
       <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 justify-center mb-4 sm:mb-8">
-        <FlagSubmission />
+        <FlagSubmissionPopover />
         <Link href="/problems"> <Button>Back</Button> </Link>
       </div>
       <div className="space-y-6">
