@@ -18,16 +18,12 @@ interface Message {
 }
 
 export function FlagSubmission({ className }: { className?: string }) {
-  const [teamName, setTeamName] = useState('');
+  const [teamName, setTeamName] = useState(() => {
+    const lastTeamName = localStorage.getItem("lastTeamName");
+    return lastTeamName || '';
+  });
   const [flag, setFlag] = useState('');
   const [message, setMessage] = useState<Message>({ messageType: MessageType.INFO, message: '' });
-
-  useEffect(() => {
-    const lastTeamName = localStorage.getItem("lastTeamName");
-    if (lastTeamName) {
-      setTeamName(lastTeamName);
-    }
-  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
