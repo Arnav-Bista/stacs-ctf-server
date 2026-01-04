@@ -1,7 +1,7 @@
 'use client';
 
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   LineChart,
   Line,
@@ -15,102 +15,103 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-type DataPoint = {
+type RawDataPoint = {
+  id: number;
   name: string;
-  points: number;
   found_at: number;
 };
 
-interface TransormedData {
+interface PlottingData {
   name: string,
-  data: Omit<DataPoint, "name">[]
+  data: Array<{
+    found_at: number,
+    count: number
+  }>
 }
 
-// Call me shameless but I made this one using Claude 
-function transformData(rawData: DataPoint[]): TransormedData[] {
-  // Get all unique timestamps and sort them
-  const timestamps = [...new Set([
-    ...rawData.map(entry => new Date(entry.found_at).getTime()),
-  ])].sort((a, b) => a - b);
+function transformData(rawData: RawDataPoint[]): PlottingData[] {
+  let plottingData: PlottingData[] = [];
+  let nameMappings = new Map<string, number>();
+  let maxTime: number = 0;
 
-  // Initialize teams with their data arrays
-  const teams = [...new Set(rawData.map(entry => entry.name))];
-  const data: TransormedData[] = teams.map(name => ({
-    name,
-    data: timestamps.map(timestamp => ({
-      points: 0,
-      found_at: timestamp
-    }))
-  }));
+  for (let i = 0; i < rawData.length; i++) {
+    let currentEntry = rawData[i];
+    let currentTime = new Date(currentEntry.found_at).getTime();
+    maxTime = Math.max(maxTime, currentTime);
 
-  // Create a map for easy team data access
-  const teamMap = new Map(data.map(team => [team.name, team]));
+    if (nameMappings.get(currentEntry.name) === undefined) {
+      nameMappings.set(currentEntry.name, plottingData.length);
+      plottingData.push({
+        name: currentEntry.name,
+        data: [
+          {
+            found_at: currentTime - 1,
+            count: 0
+          }
+        ]
+      });
+    }
 
-  // Accumulate points for each team
-  let currentPoints: { [key: string]: number } = {};
-  timestamps.forEach(timestamp => {
-    // Get all entries for this timestamp
-    const entries = rawData.filter(
-      entry => new Date(entry.found_at).getTime() <= timestamp
-    );
+    let plottingEntry = plottingData[nameMappings.get(currentEntry.name)!];
+    plottingEntry.data.push({
+      count: plottingEntry.data[plottingEntry.data.length - 1].count + 1,
+      found_at: currentTime
+    })
+  }
 
-    // Calculate cumulative points for each team up to this timestamp
-    teams.forEach(teamName => {
-      currentPoints[teamName] = entries
-        .filter(entry => entry.name === teamName)
-        .reduce((sum, entry) => sum + entry.points, 0);
+  for (let i = 0; i < plottingData.length; i++) {
+    const current = plottingData[i];
+    const last = current.data[current.data.length - 1];
+    if (last.found_at !== maxTime) {
+      current.data.push({
+        found_at: maxTime,
+        count: last.count
+      });
+    }
+  }
 
-      // Find the data point for this timestamp and update it
-      const teamData = teamMap.get(teamName)!;
-      const dataPoint = teamData.data.find(d => d.found_at === timestamp);
-      if (dataPoint) {
-        dataPoint.points = currentPoints[teamName];
-      }
-    });
-  });
-
-  return data;
+  return plottingData;
 }
 
 export default function Leaderboard() {
-  const [rawData, setRawData] = useState<DataPoint[]>([]);
+  const [rawData, setRawData] = useState<RawDataPoint[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const lastDataId = useRef(0);
 
   useEffect(() => {
-    const fetchData = async () => {
+    async function fetchData() {
       try {
-        const response = await fetch('/api/leaderboard');
+        const response = await fetch(`/api/leaderboard?lastId=${lastDataId.current}`);
         if (!response.ok) throw new Error('Failed to fetch data');
-        const newData = await response.json();
+        const data = (await response.json()) as RawDataPoint[];
 
-        const hasDataChanged = JSON.stringify(newData) !== JSON.stringify(rawData);
-
-        if (hasDataChanged) {
+        if (data.length !== 0) {
           console.log('Leaderboard data updated');
-          setRawData(newData);
+          lastDataId.current = data[data.length - 1].id;
+          setRawData(prev => [...prev, ...data]);
         }
       } catch (error) {
         console.error('Error fetching leaderboard data:', error);
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
-    // Initial fetch
     fetchData();
+
     // Every 15 seconds
     const intervalId = setInterval(fetchData, 15000);
     return () => clearInterval(intervalId);
-  }, [rawData]);
+  }, []);
 
   const transformedData = transformData(rawData);
 
   // Calculate current standings
   const currentStandings = transformedData.map(team => ({
     name: team.name,
-    points: team.data[team.data.length - 1].points
-  })).sort((a, b) => b.points - a.points);
+    count: team.data[team.data.length - 1].count
+  })).sort((a, b) => b.count - a.count);
 
   return (
     <div className="flex flex-col lg:flex-row h-screen p-4 lg:p-6 gap-4 lg:gap-6">
@@ -144,9 +145,10 @@ export default function Leaderboard() {
                   }}
                 />
                 <YAxis
+                  dataKey="count"
                   className="text-sm text-muted-foreground"
                   label={{
-                    value: 'Points',
+                    value: 'Flags',
                     angle: -90,
                     position: 'insideLeft',
                     className: "text-muted-foreground"
@@ -179,9 +181,9 @@ export default function Leaderboard() {
                   return (
                     <Line
                       key={team.name}
-                      type="linear"
+                      type="stepAfter"
                       data={team.data}
-                      dataKey="points"
+                      dataKey="count"
                       name={team.name}
                       stroke={selectedTeam === team.name ? '#ffa07a' : 'hsl(var(--chart-1))'}
                       strokeWidth={selectedTeam === team.name ? 3 : 1.5}
@@ -223,7 +225,7 @@ export default function Leaderboard() {
                   <span>{team.name}</span>
                 </div>
                 <span className="font-bold">
-                  {team.points} pts
+                  {team.count} Flags
                 </span>
               </div>
             </div>
