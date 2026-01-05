@@ -1,33 +1,12 @@
 'use client';
 
-
 import { useState, useEffect, useRef } from 'react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer
-} from 'recharts';
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-type RawDataPoint = {
-  id: number;
-  name: string;
-  found_at: number;
-};
-
-interface PlottingData {
-  name: string,
-  data: Array<{
-    found_at: number,
-    count: number
-  }>
-}
+import { TrophyIcon } from 'lucide-react';
+import LeaderboardLoading from './loading';
+import { PlottingData, RawDataPoint, Standings } from './types';
+import Leaderboard from './leaderboard';
 
 function transformData(rawData: RawDataPoint[]): PlottingData[] {
   let plottingData: PlottingData[] = [];
@@ -42,6 +21,7 @@ function transformData(rawData: RawDataPoint[]): PlottingData[] {
     if (nameMappings.get(currentEntry.name) === undefined) {
       nameMappings.set(currentEntry.name, plottingData.length);
       plottingData.push({
+        id: currentEntry.teamId,
         name: currentEntry.name,
         data: [
           {
@@ -69,12 +49,12 @@ function transformData(rawData: RawDataPoint[]): PlottingData[] {
       });
     }
   }
-
   return plottingData;
 }
 
-export default function Leaderboard() {
+export default function LeaderboardPage() {
   const [rawData, setRawData] = useState<RawDataPoint[]>([]);
+  const [standings, setStandings] = useState<Standings>([]);
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const lastDataId = useRef(0);
@@ -82,14 +62,17 @@ export default function Leaderboard() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`/api/leaderboard?lastId=${lastDataId.current}`);
-        if (!response.ok) throw new Error('Failed to fetch data');
-        const data = (await response.json()) as RawDataPoint[];
+        const [standingRequest, graphRequest] = await Promise.all([
+          fetch("/api/leaderboard/top"), fetch(`/api/leaderboard?lastId=${lastDataId.current}`)
+        ])
+        if (!graphRequest.ok || !standingRequest.ok) throw new Error('Failed to fetch data');
+        const [standingData, graphData]: [Standings, RawDataPoint[]] = await Promise.all([standingRequest.json(), graphRequest.json()]);
 
-        if (data.length !== 0) {
+        if (graphData.length !== 0) {
           console.log('Leaderboard data updated');
-          lastDataId.current = data[data.length - 1].id;
-          setRawData(prev => [...prev, ...data]);
+          lastDataId.current = graphData[graphData.length - 1].id;
+          setRawData(prev => [...prev, ...graphData]);
+          setStandings(standingData);
         }
       } catch (error) {
         console.error('Error fetching leaderboard data:', error);
@@ -105,133 +88,150 @@ export default function Leaderboard() {
     return () => clearInterval(intervalId);
   }, []);
 
-  const transformedData = transformData(rawData);
-
-  // Calculate current standings
-  const currentStandings = transformedData.map(team => ({
-    name: team.name,
-    count: team.data[team.data.length - 1].count
-  })).sort((a, b) => b.count - a.count);
+  const transformedData = transformData(rawData).sort((a, b) => b.data[b.data.length - 1].count - a.data[a.data.length - 1].count);
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen p-4 lg:p-6 gap-4 lg:gap-6">
-      <div>
+    <div className='flex flex-col p-8'>
+      <div className='flex gap-4 items-center'>
         <Link href="/"><Button>&lt;</Button></Link>
+        <TrophyIcon />
+        <h1>Leaderboard</h1>
       </div>
-      <Card className="w-full lg:w-[70%] p-4 lg:p-6">
-        {isLoading ? (
-          <div className="h-[calc(100vh-120px)] flex items-center justify-center">
-            <div className="text-lg text-muted-foreground">Loading...</div>
-          </div>
-        ) : (
-          <div className="h-[300px] lg:h-[calc(100vh-120px)]">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart>
-                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis
-                  dataKey="found_at"
-                  className="text-sm text-muted-foreground"
-                  type="number"
-                  domain={[
-                    new Date("2025-02-15T15:00:00").getTime(),
-                  ]}
-                  scale="time"
-                  tickFormatter={(value) => {
-                    const date = new Date(value);
-                    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                  }}
-                  label={{
-                    value: 'Time',
-                  }}
-                />
-                <YAxis
-                  dataKey="count"
-                  className="text-sm text-muted-foreground"
-                  label={{
-                    value: 'Flags',
-                    angle: -90,
-                    position: 'insideLeft',
-                    className: "text-muted-foreground"
-                  }}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '0.5rem',
-                    color: 'hsl(var(--foreground))'
-                  }}
-                  labelClassName="text-muted-foreground"
-                  itemStyle={{
-                    color: 'hsl(var(--foreground))'
-                  }}
-                  labelFormatter={(value) => {
-                    const date = new Date(value);
-                    return date.toLocaleString('en-US', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                      hour12: true
-                    });
-                  }}
-                  itemSorter={(a) => (typeof a.value === 'number' ? -a.value : 0)}
-                  formatter={(value, name) => [`${value} pts`, name]}
-                />
-                {currentStandings.map((standing) => {
-                  const team = transformedData.find(t => t.name === standing.name)!;
-                  return (
-                    <Line
-                      key={team.name}
-                      type="stepAfter"
-                      data={team.data}
-                      dataKey="count"
-                      name={team.name}
-                      stroke={selectedTeam === team.name ? '#ffa07a' : 'hsl(var(--chart-1))'}
-                      strokeWidth={selectedTeam === team.name ? 3 : 1.5}
-                      dot={selectedTeam === team.name}
-                      activeDot={{ r: 8 }}
-                      opacity={selectedTeam ? (selectedTeam === team.name ? 1 : 0.3) : 1}
-                    />
-                  );
-                })}
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-      </Card>
-
-      {/* Leaderboard section (30%) */}
-      <Card className="w-full lg:w-[30%] p-4 lg:p-6">
-        <h2 className="text-xl font-semibold mb-6">Leaderboard</h2>
-        <div className="space-y-2">
-          {currentStandings.map((team, index) => (
-            <div
-              key={team.name}
-              className={`p-2 lg:p-3 rounded-md cursor-pointer transition-all
-                ${selectedTeam === team.name
-                  ? 'bg-muted scale-105'
-                  : 'hover:bg-muted/50'
-                }`}
-              onClick={() => setSelectedTeam(team.name === selectedTeam ? null : team.name)}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1 lg:gap-2">
-                  <span className="font-semibold">{index + 1}.</span>
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{
-                      backgroundColor: selectedTeam === team.name ? '#ffa07a' : 'hsl(var(--chart-1))'
-                    }}
-                  />
-                  <span>{team.name}</span>
-                </div>
-                <span className="font-bold">
-                  {team.count} Flags
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Card>
+      {
+        isLoading ? <LeaderboardLoading /> :
+          <Leaderboard
+            data={transformedData}
+            standings={standings}
+            startTime={
+              new Date("2025-02-15T15:00:00").getTime()
+            }
+            endTime={
+              new Date("2025-02-15T21:00:00").getTime()
+            }
+          />
+      }
     </div>
   );
+
+  // return (
+  //   <div className="flex flex-col lg:flex-row h-screen p-4 lg:p-6 gap-4 lg:gap-6">
+  //     <div>
+  //       <Link href="/"><Button>&lt;</Button></Link>
+  //     </div>
+  //     <Card className="w-full lg:w-[70%] p-4 lg:p-6">
+  //       {isLoading ? (
+  //         <div className="h-[calc(100vh-120px)] flex items-center justify-center">
+  //           <div className="text-lg text-muted-foreground">Loading...</div>
+  //         </div>
+  //       ) : (
+  //         <div className="h-[300px] lg:h-[calc(100vh-120px)]">
+  //           <ResponsiveContainer width="100%" height="100%">
+  //             <LineChart>
+  //               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+  //               <XAxis
+  //                 dataKey="found_at"
+  //                 className="text-sm text-muted-foreground"
+  //                 type="number"
+  //                 domain={[
+  //                   new Date("2025-02-15T15:00:00").getTime(),
+  //                 ]}
+  //                 scale="time"
+  //                 tickFormatter={(value) => {
+  //                   const date = new Date(value);
+  //                   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  //                 }}
+  //                 label={{
+  //                   value: 'Time',
+  //                 }}
+  //               />
+  //               <YAxis
+  //                 dataKey="count"
+  //                 className="text-sm text-muted-foreground"
+  //                 label={{
+  //                   value: 'Flags',
+  //                   angle: -90,
+  //                   position: 'insideLeft',
+  //                   className: "text-muted-foreground"
+  //                 }}
+  //               />
+  //               <Tooltip
+  //                 contentStyle={{
+  //                   backgroundColor: 'hsl(var(--card))',
+  //                   border: '1px solid hsl(var(--border))',
+  //                   borderRadius: '0.5rem',
+  //                   color: 'hsl(var(--foreground))'
+  //                 }}
+  //                 labelClassName="text-muted-foreground"
+  //                 itemStyle={{
+  //                   color: 'hsl(var(--foreground))'
+  //                 }}
+  //                 labelFormatter={(value) => {
+  //                   const date = new Date(value);
+  //                   return date.toLocaleString('en-US', {
+  //                     hour: '2-digit',
+  //                     minute: '2-digit',
+  //                     hour12: true
+  //                   });
+  //                 }}
+  //                 itemSorter={(a) => (typeof a.value === 'number' ? -a.value : 0)}
+  //                 formatter={(value, name) => [`${value} pts`, name]}
+  //               />
+  //               {currentStandings.map((standing) => {
+  //                 const team = transformedData.find(t => t.name === standing.name)!;
+  //                 return (
+  //                   <Line
+  //                     key={team.name}
+  //                     type="stepAfter"
+  //                     data={team.data}
+  //                     dataKey="count"
+  //                     name={team.name}
+  //                     stroke={selectedTeam === team.name ? '#ffa07a' : 'hsl(var(--chart-1))'}
+  //                     strokeWidth={selectedTeam === team.name ? 3 : 1.5}
+  //                     dot={selectedTeam === team.name}
+  //                     activeDot={{ r: 8 }}
+  //                     opacity={selectedTeam ? (selectedTeam === team.name ? 1 : 0.3) : 1}
+  //                   />
+  //                 );
+  //               })}
+  //             </LineChart>
+  //           </ResponsiveContainer>
+  //         </div>
+  //       )}
+  //     </Card>
+  //
+  //     {/* Leaderboard section (30%) */}
+  //     <Card className="w-full lg:w-[30%] p-4 lg:p-6">
+  //       <h2 className="text-xl font-semibold mb-6">Leaderboard</h2>
+  //       <div className="space-y-2">
+  //         {currentStandings.map((team, index) => (
+  //           <div
+  //             key={team.name}
+  //             className={`p-2 lg:p-3 rounded-md cursor-pointer transition-all
+  //               ${selectedTeam === team.name
+  //                 ? 'bg-muted scale-105'
+  //                 : 'hover:bg-muted/50'
+  //               }`}
+  //             onClick={() => setSelectedTeam(team.name === selectedTeam ? null : team.name)}
+  //           >
+  //             <div className="flex items-center justify-between">
+  //               <div className="flex items-center gap-1 lg:gap-2">
+  //                 <span className="font-semibold">{index + 1}.</span>
+  //                 <div
+  //                   className="w-3 h-3 rounded-full"
+  //                   style={{
+  //                     backgroundColor: selectedTeam === team.name ? '#ffa07a' : 'hsl(var(--chart-1))'
+  //                   }}
+  //                 />
+  //                 <span>{team.name}</span>
+  //               </div>
+  //               <span className="font-bold">
+  //                 {team.count} Flags
+  //               </span>
+  //             </div>
+  //           </div>
+  //         ))}
+  //       </div>
+  //     </Card>
+  //   </div>
+  // );
 }

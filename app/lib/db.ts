@@ -28,6 +28,11 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_team_flags_team_id ON team_flags(team_id);
   CREATE INDEX IF NOT EXISTS idx_team_flags_flag_id ON team_flags(flag_id);
   CREATE INDEX IF NOT EXISTS idx_team_flags_id_found_at ON team_flags(id, found_at);
+
+  CREATE TABLE IF NOT EXISTS config (
+    key TEXT PRIMARY KEY,
+    value TEXT
+  );
 `
 );
 

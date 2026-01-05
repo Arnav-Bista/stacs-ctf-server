@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 function getLeaderboardData(lastId: number) {
   const stmt = db.prepare(`
-  SELECT team_flags.id, name, found_at FROM teams 
+  SELECT teams.id as teamId, team_flags.id, name, found_at FROM teams 
   JOIN team_flags ON teams.id = team_flags.team_id 
   JOIN flags ON team_flags.flag_id = flags.id 
   WHERE team_flags.id > ?
