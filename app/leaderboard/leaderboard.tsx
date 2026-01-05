@@ -36,7 +36,7 @@ export default function Leaderboard(props: LeaderboardProps) {
 
   return (
     <div className="flex flex-wrap gap-4 p-8 w-full">
-      <Card className="flex-[2] min-w-[40rem]">
+      <Card className="flex-[2] min-w-[40rem] min-h-[40rem]">
         <CardHeader>
           <CardTitle>Flags over Time</CardTitle>
           <CardDescription>Final scoring applies a multiplier based on solve difficulty — standings may change</CardDescription>
