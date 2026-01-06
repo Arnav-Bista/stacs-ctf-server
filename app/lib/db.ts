@@ -37,10 +37,5 @@ db.exec(`
 `
 );
 
-// Migration: Add join_key column to existing teams table
-try {
-  db.exec(`ALTER TABLE teams ADD COLUMN join_key TEXT;`);
-} catch (e) {
-}
 
 export default db;
