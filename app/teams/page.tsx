@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from "@/components/ui/label";
+import { Loader } from '@/components/ui/loader';
 import Link from "next/link";
 
 interface Message {
@@ -19,14 +20,22 @@ export default function TeamRegistration() {
   const [joinKey, setJoinKey] = useState('');
   const [regmessage, setRegMessage] = useState<Message>({ isError: false, message: '' });
   const [joinmessage, setJoinMessage] = useState<Message>({ isError: false, message: '' });
+  const [loading, setLoading] = useState(true);
 
   // Check if team already assigned
   useEffect(() => {
-    const storedTeam = localStorage.getItem('team');
-    if (storedTeam) {
-      router.push('/teams/myteam');
-    }
-  }, []);
+    const timeout = setTimeout(() => {
+      const storedTeam = localStorage.getItem("team");
+
+      if (storedTeam) {
+        router.push("/teams/myteam");
+      } else {
+        setLoading(false);
+      }
+    }, 300); // Minimum loading time for better UX, reduces flicker :)
+
+    return () => clearTimeout(timeout);
+  }, [router]);
 
   async function handleSubmitNewTeam(e: React.FormEvent) {
     e.preventDefault();
@@ -125,7 +134,14 @@ export default function TeamRegistration() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <Card className="max-w-md w-full">
+
+      {loading && (
+        <Loader />
+      )}
+
+      {!loading && ( <>
+      {/* Register a New Team Card */}
+      <Card className="max-w-md w-full mr-10">
         <CardHeader>
           <CardTitle className="text-center">Register A New Team</CardTitle>
         </CardHeader>
@@ -160,7 +176,10 @@ export default function TeamRegistration() {
           </form>
         </CardContent>
       </Card>
-      <Card className="max-w-md w-full">
+
+
+      {/* Join a Team Card */}
+      <Card className="max-w-md w-full ml-10">
         <CardHeader>
           <CardTitle className="text-center">Join a Team</CardTitle>
         </CardHeader>
@@ -195,6 +214,7 @@ export default function TeamRegistration() {
           </form>
         </CardContent>
       </Card>
+      </>)}
     </div>
   );
 }
