@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/app/lib/db";
 import Flag from "@/app/lib/types/flag";
-import { getTeamId } from "../teams/misc";
+import { getTeamById } from "../teams/misc";
 
 interface SubmitFlagData {
-  teamName: string,
+  id: string,
   flag: string
 }
 
@@ -12,16 +12,17 @@ export async function POST(request: NextRequest) {
   try {
 
     const data = await request.json() as Partial<SubmitFlagData>;
-    if (!data.teamName) {
+    if (!data.id) {
       return NextResponse.json(
-        { error: "You need a team name." },
+        { error: "You need a team ID." },
         { status: 400 }
       );
     }
-    const teamId = await getTeamId(data.teamName);
+
+    const teamId = await getTeamById(data.id);
     if (!teamId) {
       return NextResponse.json(
-        { error: "Team name not found." },
+        { error: "Team not found." },
         { status: 404 }
       );
     }

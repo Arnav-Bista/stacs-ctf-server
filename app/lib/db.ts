@@ -13,7 +13,8 @@ db.exec(`
 
   CREATE TABLE IF NOT EXISTS teams (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    join_key TEXT UNIQUE NOT NULL
   );
   
   CREATE TABLE IF NOT EXISTS team_flags (
@@ -35,5 +36,11 @@ db.exec(`
   );
 `
 );
+
+// Migration: Add join_key column to existing teams table
+try {
+  db.exec(`ALTER TABLE teams ADD COLUMN join_key TEXT;`);
+} catch (e) {
+}
 
 export default db;

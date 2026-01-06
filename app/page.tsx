@@ -11,7 +11,7 @@ export default function Home() {
       <div className="mt-4 flex flex-col items-center gap-4 w-full px-4 sm:px-0 sm:w-auto">
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
           <Link href="/teams" className="w-full sm:w-auto">
-            <Button className="w-full">Register Team</Button>
+            <Button className="w-full">Register or Join Team</Button>
           </Link>
           <Link href="/submit" className="w-full sm:w-auto">
             <Button className="w-full">Submit Flag</Button>
