@@ -18,26 +18,25 @@ interface Message {
 
 export default function TeamView() {
     const router = useRouter();
-    const [team, setTeam] = useState<Team>({ id: 0, name: '', join_key: '' });
-
-    function getStoredTeam(){
+    const [team, setTeam] = useState<Team>(() => {
         const storedTeam = localStorage.getItem('team');
         if (storedTeam) {
-            const parsedTeam: Team = JSON.parse(storedTeam);
-            setTeam(parsedTeam);
-        } else {
+            return JSON.parse(storedTeam);
+        }
+        return { id: 0, name: '', join_key: '' };
+    });
+
+    useEffect(() => {
+        const storedTeam = localStorage.getItem('team');
+        if (!storedTeam) {
             router.push('/teams');
         }
-    }
+    }, [router]);
 
     function leaveTeam(){
         localStorage.removeItem('team');
         router.push('/teams');
     }
-
-    useEffect(() => {
-        getStoredTeam();
-    }, []);
 
 
     return (
