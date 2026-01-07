@@ -51,6 +51,11 @@ export default function TeamRegistration() {
       return;
     }
 
+    if (teamName.length > 50) {
+      setRegMessage({ isError: true, message: 'Team name must be at most 50 characters long.' });
+      return;
+    }
+
     try {
       const response = await fetch('/api/teams', {
         method: 'POST',
@@ -157,6 +162,7 @@ export default function TeamRegistration() {
                 placeholder="Enter your team name"
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
+                maxLength={50}
               />
 
             </div>

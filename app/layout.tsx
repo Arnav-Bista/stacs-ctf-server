@@ -11,7 +11,7 @@ const firaCode = Fira_Code({
 
 export const metadata: Metadata = {
   title: "STACS CTF",
-  description: "STACS CTF 2025",
+  description: "STACS CTF 2026",
 };
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
       <body
         className={`${firaCode.className} ${firaCode.variable} antialiased`}
       >
-        <MurrayCurveBackground />
+        {/* <MurrayCurveBackground /> */}
         {children}
       </body>
     </html>

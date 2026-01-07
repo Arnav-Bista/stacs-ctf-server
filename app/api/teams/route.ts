@@ -30,6 +30,18 @@ export async function POST(request: NextRequest) {
       { status: 400 }
     );
   }
+  if (data.name.length < 3) {
+    return NextResponse.json(
+      { error: "Team name must be at least 3 characters long." },
+      { status: 400 }
+    );
+  }
+  if (data.name.length > 50) {
+    return NextResponse.json(
+      { error: "Team name must be at most 50 characters long." },
+      { status: 400 }
+    );
+  }
   try {
     if (await getTeamId(data.name)) {
       return NextResponse.json(
