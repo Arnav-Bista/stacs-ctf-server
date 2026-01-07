@@ -1,6 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Faq() {
   return (
@@ -38,6 +40,24 @@ export default function Faq() {
               </ul>
               <p>
                 Each challenge has a point value based on its difficulty. Solve challenges to earn points for your team and climb the leaderboard!
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="score">
+            <AccordionTrigger>How does Scoring Work? <span className="text-red-400">New System!</span></AccordionTrigger>
+            <AccordionContent className="space-y-3">
+              <p>
+                We heard you! We&apos;ve made a new scoring system for the CTF. Each flag has a set amount of <strong>POINTS</strong>.
+              </p>
+              <p>
+                This is allocated based on the difficulty we think the problem is. However, a problem that we find hard might be really easy for you and vice versa.
+              </p>
+              <p>
+                Now for each flag, we keep track of how many teams also captured it. Then the real score for you is going to be given by <strong>POINTS × (100 / num_found)</strong>.
+              </p>
+              <p>
+                This means if you&apos;re the only one that found a flag, you get 100× the base points. But if 100 teams found it, you only get 1× the base points. So harder problems—ones fewer teams solve—are worth way more!
               </p>
             </AccordionContent>
           </AccordionItem>
@@ -94,30 +114,12 @@ export default function Faq() {
               </p>
             </AccordionContent>
           </AccordionItem>
-        
-          <AccordionItem value="score">
-            <AccordionTrigger>How does Scoring Work? <span className="text-red-400">New System!</span></AccordionTrigger>
-            <AccordionContent className="space-y-3">
-              <p>
-                We heard you! We&apos;ve made a new scoring system for the CTF. Each flag has a set amount of <strong>POINTS</strong>.
-              </p>
-              <p>
-                This is allocated based on the difficulty we think the problem is. However, a problem that we find hard might be really easy for you and vice versa.
-              </p>
-              <p>
-                Now for each flag, we keep track of how many teams also captured it. Then the real score for you is going to be given by <strong>POINTS × (100 / num_found)</strong>.
-              </p>
-              <p>
-                This means if you&apos;re the only one that found a flag, you get 100× the base points. But if 100 teams found it, you only get 1× the base points. So harder problems—ones fewer teams solve—are worth way more!
-              </p>
-            </AccordionContent>
-          </AccordionItem>
 
           <AccordionItem value="hidden">
             <AccordionTrigger>Hidden Challenges?</AccordionTrigger>
             <AccordionContent className="space-y-3">
               <p>
-                We&apos;ve scatted hidden challenges that could be unlocked by a password. We&apos;d recommend checking them out!
+                We&apos;ve scatted hidden challenges... or have we?
               </p>
             </AccordionContent>
           </AccordionItem>
@@ -132,6 +134,11 @@ export default function Faq() {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+        <div className="flex justify-center mt-6">
+          <Link href="/">
+            <Button>Back to Home</Button>
+          </Link>
+        </div>
       </CardContent>
     </Card>
   );
