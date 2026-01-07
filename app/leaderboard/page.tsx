@@ -8,6 +8,41 @@ import LeaderboardLoading from './loading';
 import { PlottingData, RawDataPoint, Standings } from './types';
 import Leaderboard from './leaderboard';
 import { Dialog, DialogDescription, DialogTitle, DialogTrigger, DialogHeader, DialogContent } from '@/components/ui/dialog';
+import CtfConfig from '@/app/lib/types/config';
+import { Loader } from '@/components/ui/loader';
+
+async function fetchConfig(): Promise<CtfConfig | null> {
+  try {
+    const response = await fetch("/api/config");
+    if (!response.ok) throw new Error('Failed to fetch config');
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching config:', error);
+    return null;
+  }
+}
+
+async function fetchStandings(): Promise<Standings | null> {
+  try {
+    const response = await fetch("/api/leaderboard/top");
+    if (!response.ok) throw new Error('Failed to fetch standings');
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching standings:', error);
+    return null;
+  }
+}
+
+async function fetchGraphData(lastId: number): Promise<RawDataPoint[] | null> {
+  try {
+    const response = await fetch(`/api/leaderboard?lastId=${lastId}`);
+    if (!response.ok) throw new Error('Failed to fetch graph data');
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching graph data:', error);
+    return null;
+  }
+}
 
 function transformData(rawData: RawDataPoint[]): PlottingData[] {
   let plottingData: PlottingData[] = [];
@@ -56,38 +91,46 @@ function transformData(rawData: RawDataPoint[]): PlottingData[] {
 export default function LeaderboardPage() {
   const [rawData, setRawData] = useState<RawDataPoint[]>([]);
   const [standings, setStandings] = useState<Standings>([]);
+  const [config, setConfig] = useState<CtfConfig | null>(null);
 
-  // TODO
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const lastDataId = useRef(0);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const [standingRequest, graphRequest] = await Promise.all([
-          fetch("/api/leaderboard/top"), fetch(`/api/leaderboard?lastId=${lastDataId.current}`)
-        ])
-        if (!graphRequest.ok || !standingRequest.ok) throw new Error('Failed to fetch data');
-        const [standingData, graphData]: [Standings, RawDataPoint[]] = await Promise.all([standingRequest.json(), graphRequest.json()]);
+    async function initialize() {
+      // Fetch config + initial data
+      const [configData, initialStandings, initialGraph] = await Promise.all([
+        fetchConfig(),
+        fetchStandings(),
+        fetchGraphData(lastDataId.current)
+      ]);
 
-        if (graphData.length !== 0) {
-          console.log('Leaderboard data updated');
-          lastDataId.current = graphData[graphData.length - 1].id;
-          setRawData(prev => [...prev, ...graphData]);
-          setStandings(standingData);
-        }
-      } catch (error) {
-        console.error('Error fetching leaderboard data:', error);
-      } finally {
-        setIsLoading(false);
+      if (configData) setConfig(configData);
+      if (initialStandings) setStandings(initialStandings);
+      if (initialGraph && initialGraph.length > 0) {
+        lastDataId.current = initialGraph[initialGraph.length - 1].id;
+        setRawData(initialGraph);
       }
+      setIsLoading(false);
     }
 
-    fetchData();
+    async function pollData() {
+      // Only poll live data
+      const [graphData, newStandings] = await Promise.all([
+        fetchGraphData(lastDataId.current),
+        fetchStandings()
+      ]);
 
-    // Every 15 seconds
-    const intervalId = setInterval(fetchData, 15000);
+      if (graphData && graphData.length > 0) {
+        console.log('Leaderboard data updated');
+        lastDataId.current = graphData[graphData.length - 1].id;
+        setRawData(prev => [...prev, ...graphData]);
+      }
+      if (newStandings) setStandings(newStandings);
+    }
+
+    initialize();
+    const intervalId = setInterval(pollData, 15000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -129,16 +172,15 @@ export default function LeaderboardPage() {
         </Dialog>
       </div>
       {
-        isLoading ? <LeaderboardLoading /> :
+        isLoading ?
+          <div className='w-full h-[80vh] flex items-center justify-center'>
+            <Loader />
+          </div> :
           <Leaderboard
             data={transformedData}
             standings={standings}
-            startTime={
-              new Date("2025-02-15T15:00:00").getTime()
-            }
-            endTime={
-              new Date("2025-02-15T21:00:00").getTime()
-            }
+            startTime={config?.start ?? new Date("2025-02-15T15:00:00").getTime()}
+            endTime={config?.end ?? new Date("2025-02-15T21:00:00").getTime()}
           />
       }
     </div>
