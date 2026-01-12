@@ -24,7 +24,7 @@ export default function RenderQuestions({ slug }: { slug: string }) {
       </h1>
       <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 justify-center mb-4 sm:mb-8">
         <FlagSubmissionPopover />
-        <Link href="/archives/2025"> <Button>Back</Button> </Link>
+        <Link href="/problems"> <Button>Back</Button> </Link>
       </div>
       <div className="space-y-6">
         {allQuestions.map((question, index) => (
