@@ -8,7 +8,7 @@ import { ChevronDown, Download, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import Image from "next/image";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import FlagSubmissionPopover from "@/app/submit/flag-submission-popover";
@@ -115,23 +115,27 @@ function Hints({ hints }: { hints?: string[] | React.ReactNode }) {
   if (!hints || (Array.isArray(hints) && hints.length === 0)) return null;
 
   return (
-    <Collapsible>
-      <CollapsibleTrigger asChild>
-        <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-          <span className="text-sm font-medium">Need hints?</span>
-          <ChevronDown className="h-4 w-4" />
-        </Button>
-      </CollapsibleTrigger>
-      <CollapsibleContent className="mt-2">
-        <div className="bg-muted p-4 rounded-md space-y-2">
-          {Array.isArray(hints) && hints.map((hint, i) => (
-            <p key={i} className="text-sm">
-              <span className="font-semibold">Hint {i + 1}:</span> {hint}
-            </p>
-          ))}
-        </div>
-      </CollapsibleContent>
-    </Collapsible>
+    <Accordion type="single" collapsible className="border rounded-md">
+      <AccordionItem value="hints-wrapper" className="border-none">
+        <AccordionTrigger className="px-4 hover:no-underline">
+          Need hints?
+        </AccordionTrigger>
+        <AccordionContent className="px-4 pb-4">
+          <Accordion type="multiple" className="border rounded-md">
+            {Array.isArray(hints) && hints.map((hint, i) => (
+              <AccordionItem key={i} value={`hint-${i}`}>
+                <AccordionTrigger className="px-4 hover:no-underline">
+                  Hint {i + 1}
+                </AccordionTrigger>
+                <AccordionContent className="px-4">
+                  <p className="text-sm text-muted-foreground">{hint}</p>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }
 
