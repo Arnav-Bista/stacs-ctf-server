@@ -15,6 +15,19 @@ const questions: Question[] = [
       },
     ]
   },
+  {
+    id: 6,
+    title: "https://us-tuna-sounds-images.voicemod.net/5b23cd9b-0c2d-471f-8589-9e6bdee73d4c-1680393318917.jpeg",
+    description: "What the dog doing?",
+    points: 200,
+    attachments: [
+      {
+        name: "vineboom.mp3",
+        type: "file",
+        url: "/vineboom.mp3"
+      }
+    ]
+  },
 ];
 
 

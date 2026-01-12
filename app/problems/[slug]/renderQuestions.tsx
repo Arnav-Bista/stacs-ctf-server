@@ -15,55 +15,54 @@ import FlagSubmissionPopover from "@/app/submit/flag-submission-popover";
 import { useTrackerData } from "../tracker";
 
 export default function RenderQuestions({ slug }: { slug: string }) {
-  
   const questionTracker = useTrackerData();
+  const filteredQuestions = allQuestions.filter(q => q.category === slug);
+  const title = slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
   return (
-    <div className="px-4 sm:px-6 md:px-8">
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-8 text-center">
-        {slug.split('-')
-          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ')}
-      </h1>
-      <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 justify-center mb-4 sm:mb-8">
+    <div className="px-4 sm:px-8">
+      <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center">{title}</h1>
+
+      <div className="flex flex-col sm:flex-row items-center gap-4 justify-center mb-8">
         <FlagSubmissionPopover />
-        <Link href="/problems"> <Button>Back</Button> </Link>
+        <Link href="/problems"><Button>Back</Button></Link>
       </div>
+
       <div className="space-y-6">
-        {allQuestions.map((question, index) => (
-          question.category === slug &&
-          <Card key={`question-${index}`} className={`max-w-screen-md mx-auto ${ questionTracker?.found_flag_ids.has(question.id) ? "border-green-600" : ""}`}>
-            <CardHeader className="space-y-3">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                <CardTitle className="text-lg sm:text-xl break-words">{question.title}</CardTitle>
-                <span className="rounded-full text-sm bg-secondary px-3 py-1 w-fit">
-                  {question.points} points • {questionTracker?.flag_found_count_map?.get(question.id) ?? "?"} solves
-                </span>
-              </div>
-              <CardDescription className="whitespace-pre-line break-words text-wrap">
-                {question.description}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4 mb-4">
-              <QuestionContent question={question} />
-            </CardContent>
-              <CardFooter>
-                <p className="text-xs text-muted-foreground">
-                {question.lockedHint}
-                </p>
-              </CardFooter>
-          </Card>
-        ))}
+        {filteredQuestions.map((question) => {
+          const isSolved = questionTracker?.found_flag_ids.has(question.id);
+          const solveCount = questionTracker?.flag_found_count_map?.get(question.id) ?? "?";
+
+          return (
+            <Card key={question.id} className={`max-w-screen-md mx-auto ${isSolved ? "border-2 border-green-600" : ""}`}>
+              <CardHeader className="space-y-3">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                  <CardTitle className="text-xl break-all">{question.title}</CardTitle>
+                  <span className="rounded-full text-sm bg-secondary px-3 py-1 w-fit whitespace-nowrap">
+                    {question.points} pts • {solveCount} solves
+                  </span>
+                </div>
+                <CardDescription className="whitespace-pre-line">{question.description}</CardDescription>
+              </CardHeader>
+
+              <CardContent className="space-y-4 mb-4">
+                <QuestionContent question={question} />
+              </CardContent>
+
+              {question.lockedHint && (
+                <CardFooter>
+                  <p className="text-xs text-muted-foreground">{question.lockedHint}</p>
+                </CardFooter>
+              )}
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-interface QuestionContentProps {
-  question: Question;
-}
-
-function QuestionContent({ question }: QuestionContentProps) {
+function QuestionContent({ question }: { question: Question }) {
   const [isUnlocked, setIsUnlocked] = useState(!question.lockedPassword);
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -81,7 +80,7 @@ function QuestionContent({ question }: QuestionContentProps) {
     return (
       <div className="flex flex-col items-center gap-4 py-8">
         <Lock className="w-12 h-12 text-muted-foreground" />
-        <p className="text-center text-muted-foreground">This question is locked</p>
+        <p className="text-muted-foreground">This question is locked</p>
         <div className="flex gap-2 max-w-sm w-full">
           <Input
             type="password"
@@ -93,39 +92,16 @@ function QuestionContent({ question }: QuestionContentProps) {
           />
           <Button onClick={handleUnlock}>Unlock</Button>
         </div>
-        {error && (
-          <p className="text-sm text-red-500">Incorrect password</p>
-        )}
+        {error && <p className="text-sm text-red-500">Incorrect password</p>}
       </div>
     );
   }
 
   return (
     <>
-      {question.hints && question.hints.length > 0 && (
-        <Collapsible>
-          <CollapsibleTrigger asChild>
-            <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-              <span className="text-sm font-medium">Need hints?</span>
-              <ChevronDown className="h-4 w-4 transition-transform duration-200" />
-            </Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2">
-            <div className="bg-muted p-4 rounded-md space-y-2">
-              {question.hints.map((hint, index) => (
-                <p key={index} className="text-sm">
-                  <span className="font-semibold">Hint {index + 1}:</span> {hint}
-                </p>
-              ))}
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
-      )}
-
+      <Hints hints={question.hints} />
       <Attachments attachments={question.attachments} />
-
       <ApiDocumentation api={question.api} />
-
       {question.link && (
         <Link href={question.link} className="w-full">
           <Button className="w-full">View Problem</Button>
@@ -135,52 +111,48 @@ function QuestionContent({ question }: QuestionContentProps) {
   );
 }
 
+function Hints({ hints }: { hints?: string[] | React.ReactNode }) {
+  if (!hints || (Array.isArray(hints) && hints.length === 0)) return null;
 
-
-
-interface ApiDocumentationProps {
-  api?: API;
+  return (
+    <Collapsible>
+      <CollapsibleTrigger asChild>
+        <Button variant="ghost" className="w-full justify-between p-0 h-auto">
+          <span className="text-sm font-medium">Need hints?</span>
+          <ChevronDown className="h-4 w-4" />
+        </Button>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="mt-2">
+        <div className="bg-muted p-4 rounded-md space-y-2">
+          {Array.isArray(hints) && hints.map((hint, i) => (
+            <p key={i} className="text-sm">
+              <span className="font-semibold">Hint {i + 1}:</span> {hint}
+            </p>
+          ))}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
 }
 
-function ApiDocumentation({ api }: ApiDocumentationProps) {
-  return (api && api.endpoint) && (
+function ApiDocumentation({ api }: { api?: API }) {
+  if (!api?.endpoint) return null;
+
+  return (
     <div className="space-y-4 mt-4">
       <h3 className="text-lg font-semibold">API Documentation:</h3>
-      <div className="bg-muted p-3 sm:p-4 rounded-md space-y-4">
-        <div className="grid gap-3">
-          <div className="space-y-1">
-            <p className="text-xs font-semibold text-muted-foreground">ENDPOINT</p>
-            <code className="block bg-background px-2 py-1 rounded text-xs sm:text-sm break-all">
-              {api.endpoint}
-            </code>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs font-semibold text-muted-foreground">METHOD</p>
-            <code className="inline-block bg-background px-2 py-1 rounded text-xs sm:text-sm">
-              {api.method}
-            </code>
-          </div>
-          <div className="space-y-1">
-            <p className="text-xs font-semibold text-muted-foreground">DESCRIPTION</p>
-            <p className="whitespace-pre-line break-words text-wrap text-xs">
-              {api.description}
-            </p>
-          </div>
-        </div>
+      <div className="bg-muted p-4 rounded-md space-y-3">
+        <ApiField label="ENDPOINT" value={api.endpoint} mono />
+        <ApiField label="METHOD" value={api.method} mono />
+        <ApiField label="DESCRIPTION" value={api.description} />
 
         {api.requestFormat && (
-          <div className="space-y-2 pt-2 border-t border-border">
+          <div className="space-y-2 pt-2 border-t">
             <p className="text-xs font-semibold text-muted-foreground">REQUEST FORMAT</p>
-            <p className="text-xs sm:text-sm">Type: {api.requestFormat.type}</p>
+            <p className="text-sm">Type: {api.requestFormat.type}</p>
             {api.requestFormat.example && (
               <div className="bg-background p-2 rounded overflow-x-auto">
-                <ReactMarkdown
-                  className="text-xs sm:text-sm font-mono"
-                  components={{
-                    pre: ({ children }) => <pre className="whitespace-pre-wrap break-all">{children}</pre>,
-                    code: ({ children }) => <code>{children}</code>
-                  }}
-                >
+                <ReactMarkdown className="text-sm font-mono">
                   {'```json\n' + api.requestFormat.example + '\n```'}
                 </ReactMarkdown>
               </div>
@@ -192,53 +164,62 @@ function ApiDocumentation({ api }: ApiDocumentationProps) {
   );
 }
 
-interface AttachmentsProps {
-  attachments?: Question['attachments'];
+function ApiField({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
+  return (
+    <div className="space-y-1">
+      <p className="text-xs font-semibold text-muted-foreground">{label}</p>
+      {mono ? (
+        <code className="block bg-background px-2 py-1 rounded text-sm break-all">{value}</code>
+      ) : (
+        <p className="text-sm whitespace-pre-line">{value}</p>
+      )}
+    </div>
+  );
 }
 
-function Attachments({ attachments }: AttachmentsProps) {
+function Attachments({ attachments }: { attachments?: Question['attachments'] }) {
+  if (!attachments) return null;
+
   return (
-    attachments && <div className="space-y-4">
+    <div className="space-y-4">
       <h3 className="text-lg font-semibold">Attachments:</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {attachments.map((attachment, index) => (
-          <div key={index} className="flex flex-col gap-2">
-            {attachment.type === 'image' ? (
-              <div className="relative group">
-                <Image
-                  src={attachment.url}
-                  alt={attachment.name}
-                  width={400}
-                  height={192}
-                  className="rounded-lg w-full object-cover max-h-48 cursor-pointer hover:opacity-90 transition-opacity outline outline-2 outline-black"
-                  onClick={() => window.open(attachment.url, '_blank')} />
-                <span className="text-sm mt-2 text-muted-foreground break-words">{attachment.name}</span>
-                <Button
-                  variant="secondary"
-                  className="w-full justify-start mt-2"
-                  asChild
-                >
-                  <a href={attachment.url} download>
-                    <Download className="mr-2 h-4 w-4" />
-                    Download
-                  </a>
-                </Button>
-              </div>
-            ) : (
-              <Button
-                variant="secondary"
-                className="w-full justify-start"
-                asChild
-              >
-                <a href={attachment.url} download>
-                  <Download className="mr-2 h-4 w-4" />
-                  {attachment.name}
-                </a>
-              </Button>
-            )}
-          </div>
+        {attachments.map((att, i) => (
+          att.type === 'image' ? <ImageAttachment key={i} {...att} /> : <FileAttachment key={i} {...att} />
         ))}
       </div>
     </div>
+  );
+}
+
+function ImageAttachment({ url, name }: { url: string; name: string }) {
+  return (
+    <div>
+      <Image
+        src={url}
+        alt={name}
+        width={400}
+        height={192}
+        className="rounded-lg w-full object-cover max-h-48 cursor-pointer hover:opacity-90 outline outline-2 outline-black"
+        onClick={() => window.open(url, '_blank')}
+      />
+      <p className="text-sm mt-2 text-muted-foreground">{name}</p>
+      <DownloadButton url={url} label="Download" />
+    </div>
+  );
+}
+
+function FileAttachment({ url, name }: { url: string; name: string }) {
+  return <DownloadButton url={url} label={name} />;
+}
+
+function DownloadButton({ url, label }: { url: string; label: string }) {
+  return (
+    <Button variant="secondary" className="w-full justify-start mt-2" asChild>
+      <a href={url} download>
+        <Download className="mr-2 h-4 w-4" />
+        {label}
+      </a>
+    </Button>
   );
 }
