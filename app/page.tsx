@@ -26,6 +26,9 @@ export default function Home() {
         <Link href="/problems" className="w-full">
           <Button className="w-full">Problems</Button>
         </Link>
+        <Link href="/archives" className="w-full">
+          <Button variant="secondary" className="w-full">Archives</Button>
+        </Link>
       </div>
     </div>
   );

@@ -1,8 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { allQuestions } from "../problems";
-import { API, Question } from "../types";
+import { API, Question, questions } from "../questions";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Download, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -27,9 +26,9 @@ export default function RenderQuestions({ slug }: { slug: string }) {
         <Link href="/archives/2025"> <Button>Back</Button> </Link>
       </div>
       <div className="space-y-6">
-        {allQuestions.map((question, index) => (
+        {questions.map((question, index) => (
           question.category === slug &&
-          <Card key={`question-${index}`} className="max-w-screen-md mx-auto">
+          <Card key={`forensics-${index}`} className="max-w-screen-md mx-auto">
             <CardHeader className="space-y-3">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                 <CardTitle className="text-lg sm:text-xl break-words">{question.title}</CardTitle>

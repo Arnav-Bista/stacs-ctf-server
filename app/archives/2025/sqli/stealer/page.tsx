@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { FlagSubmission } from "@/app/submit/flag-submission";
+import FlagSubmissionPopover from "@/app/submit/flag-submission-popover";
 
 export default function SQLiTables() {
   const [username, setUsername] = useState("");
@@ -32,35 +33,48 @@ export default function SQLiTables() {
           password TEXT
         )
       `);
-
-      db.run(`
-        CREATE TABLE data (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          flag TEXT
-        )
-      `);
-
-      // Not expected to crack this
-      db.run(`
-        INSERT INTO users (username, name, password)
-        VALUES ('noobysqlinjection', 'ha! the flag isnt here!', 'cracking_this_password_is_not_the_intended_challenge')
-      `);
-
+      // Given this login
       db.run(`
         INSERT INTO users (username, name, password)
         VALUES ('tester', 'TestMaxer 900', 'password')
       `);
-
+      // Not expected to crack this
+      // Insert GoofMaster9000
       db.run(`
-        INSERT INTO data (flag)
-        VALUES ('flag_{information-schemas-are-useful}')
+        INSERT INTO users (username, name, password)
+        VALUES ('GoofMaster9000', 'GoofMaster9000', 'cracking_this_password_is_not_the_intended_challenge')
       `);
+
+      // Insert GoofMasters from 8900 to 8999
+      for (let i = 8900; i < 9000; i++) {
+        db.run(`
+          INSERT INTO users (username, name, password)
+          VALUES ('GoofMaster${i}', 'GoofMaster${i}', 'default_password_${i}')
+        `);
+      }
 
       setDb(db);
       setIsLoading(false);
     }
     init();
   }, []);
+
+  async function simulatePasswordChange() {
+    if (!db) return;
+    try {
+      db.run(` UPDATE users SET password = 'injections-allow-scary-triggers_this_is_the_fl@g!' WHERE username = 'GoofMaster9000'`);
+      setMessage({
+        error: false,
+        message: "Password changed successfully"
+      });
+    } catch (error) {
+      setMessage({
+        error: true,
+        message: String(error)
+      });
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!db) return;
@@ -90,8 +104,8 @@ export default function SQLiTables() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
       <div className="flex gap-2">
-        <FlagSubmission />
-        <Link href="/problems/engineering" className="mb-4"> <Button>Back</Button> </Link>
+        <FlagSubmissionPopover />
+        <Link href="/archives/2025/engineering" className="mb-4"> <Button>Back</Button> </Link>
       </div>
       <Card className="w-full">
         <CardHeader>
@@ -143,6 +157,9 @@ export default function SQLiTables() {
             )}
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Initializing..." : "Login"}
+            </Button>
+            <Button type="button" className="w-full" disabled={isLoading} onClick={simulatePasswordChange}>
+              {isLoading ? "Initializing..." : "Simulate user changing their password"}
             </Button>
           </form>
         </CardContent>

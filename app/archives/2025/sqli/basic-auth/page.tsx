@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Database } from "sql.js";
 import { initializeSqlJs } from "@/utils/initSqlJs";
 import { FlagSubmission } from "@/app/submit/flag-submission";
+import FlagSubmissionPopover from "@/app/submit/flag-submission-popover";
 export default function SQLiAuth() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -72,8 +73,8 @@ export default function SQLiAuth() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative">
       <div className="flex gap-2">
-        <FlagSubmission />
-        <Link href="/problems/engineering" className="mb-4"> <Button>Back</Button> </Link>
+        <FlagSubmissionPopover />
+        <Link href="/archives/2025/engineering" className="mb-4"> <Button>Back</Button> </Link>
       </div>
       <Card className="w-full">
         <CardHeader>

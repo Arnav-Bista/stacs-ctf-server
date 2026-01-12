@@ -183,7 +183,7 @@ export const questions: Question[] = [
     title: "SQLi v1",
     category: Category.ENGINEERING,
     description: "This is my first time learning SQL, checkout this simple auth page I made!\nBut it'll be of no use to you since you dont know my credentials 😎",
-    link: "/problems/sqli/basic-auth",
+    link: "/archives/2025/sqli/basic-auth",
     points: 150,
   },
   {
@@ -191,7 +191,7 @@ export const questions: Question[] = [
     category: Category.ENGINEERING,
     description: "So can login and bypass the authentication system... but can you find the flag?\n\nUse this login:\ntester\npassword",
     hints: ["It's a sqlite database"],
-    link: "/problems/sqli/tables",
+    link: "/archives/2025/sqli/tables",
     points: 300,
   },
   {
@@ -199,7 +199,7 @@ export const questions: Question[] = [
     category: Category.ENGINEERING,
     description: "You've just gotten news that someone else is changing their password...\n\nUse this login:\ntester\npassword",
     hints: ["🔫"],
-    link: "/problems/sqli/stealer",
+    link: "/archives/2025/sqli/stealer",
     points: 400,
   },
   {
@@ -208,7 +208,7 @@ export const questions: Question[] = [
     description: "Nothing is impossible in C\n\n Compiled using the following:\n gcc -o buffers1 -fno-stack-protector -z execstack -no-pie buffers.c",
     points: 50,
     api: {
-      endpoint: "/api/problems/buffers",
+      endpoint: "/api/archives/2025/buffers",
       method: "POST",
       description: "Send your payload to the buffer overflow challenge. The payload will be passed to the program via stdin.",
       requestFormat: {
@@ -230,7 +230,7 @@ export const questions: Question[] = [
     description: "Wait I can rewrite variables with overflow??\n\n Compiled using the following:\n gcc -o buffers2 -fno-stack-protector -z execstack -no-pie buffers.c",
     points: 450,
     api: {
-      endpoint: "/api/problems/buffers",
+      endpoint: "/api/archives/2025/buffers",
       method: "POST",
       description: "Send your payload to the buffer overflow challenge. The payload will be passed to the program via stdin.",
       requestFormat: {
@@ -252,7 +252,7 @@ export const questions: Question[] = [
     description: "The win function is never called, what are you going to do about it?\n\n Compiled using the following:\n gcc -o buffers3 -fno-stack-protector -z execstack -no-pie buffers.c",
     points: 500,
     api: {
-      endpoint: "/api/problems/buffers",
+      endpoint: "/api/archives/2025/buffers",
       method: "POST",
       description: "Send your payload to the buffer overflow challenge. The payload will be passed to the program via stdin.",
       requestFormat: {
@@ -291,7 +291,7 @@ export const questions: Question[] = [
     title: "I can write comments?!",
     description: "Mausemaster from 2m2t (2 mause 2 tools) just made a new comment section which he will be checking!",
     points: 250,
-    link: "/problems/web/tokens",
+    link: "/archives/2025/web/tokens",
     category: Category.ENGINEERING
   },
   {

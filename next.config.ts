@@ -2,7 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  turbopack: {},
+  turbopack: {
+    resolveAlias: {
+      fs: { browser: './empty.ts' },
+      path: { browser: './empty.ts' },
+      crypto: { browser: './empty.ts' },
+    },
+  },
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,

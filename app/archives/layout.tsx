@@ -1,8 +1,6 @@
-"use client";
-
 import { ReactNode } from "react";
 
-export default function ProblemsLayout({
+export default function ArchiveLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

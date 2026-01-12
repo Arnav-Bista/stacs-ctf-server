@@ -8,6 +8,7 @@ import { memo, useEffect, useState } from "react";
 import { Database } from "sql.js";
 import { FlagSubmission } from "@/app/submit/flag-submission";
 import Link from "next/link";
+import FlagSubmissionPopover from "@/app/submit/flag-submission-popover";
 
 const Comments = memo(
   function Comments({ isLoading, db, updateCounter }: { isLoading: boolean, db: Database | null, updateCounter: number }) {
@@ -98,8 +99,8 @@ export default function XSS() {
   return (
     <div className="min-h-screen flex flex-col space-y-4 items-center justify-center">
       <div className="flex gap-2">
-        <FlagSubmission />
-        <Link href="/problems/engineering" className="mb-4"> <Button>Back</Button> </Link>
+        <FlagSubmissionPopover />
+        <Link href="/archives/2025/engineering" className="mb-4"> <Button>Back</Button> </Link>
       </div>
       <Card className="w-full max-w-screen-md">
         <CardHeader>

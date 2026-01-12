@@ -21,11 +21,16 @@ interface Message {
 export function FlagSubmission({ className }: { className?: string }) {
 
   const [flag, setFlag] = useState('');
-  const [team, setTeam] = useState<Team | null>(() => {
-    const storedTeam = localStorage.getItem('team');
-    return storedTeam ? JSON.parse(storedTeam) : null;
-  });
+  const [team, setTeam] = useState<Team | null>(null);
   const [message, setMessage] = useState<Message>({ messageType: MessageType.INFO, message: '' });
+
+  useEffect(() => {
+    const storedTeam = localStorage.getItem('team');
+    if (storedTeam) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTeam(JSON.parse(storedTeam));
+    }
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
