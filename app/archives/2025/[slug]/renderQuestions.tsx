@@ -209,6 +209,16 @@ function Attachments({ attachments }: AttachmentsProps) {
                   className="rounded-lg w-full object-cover max-h-48 cursor-pointer hover:opacity-90 transition-opacity outline outline-2 outline-black"
                   onClick={() => window.open(attachment.url, '_blank')} />
                 <span className="text-sm mt-2 text-muted-foreground break-words">{attachment.name}</span>
+                <Button
+                  variant="secondary"
+                  className="w-full justify-start mt-2"
+                  asChild
+                >
+                  <a href={attachment.url} download>
+                    <Download className="mr-2 h-4 w-4" />
+                    Download
+                  </a>
+                </Button>
               </div>
             ) : (
               <Button

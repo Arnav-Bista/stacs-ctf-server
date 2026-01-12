@@ -37,7 +37,7 @@ export default function RenderQuestions({ slug }: { slug: string }) {
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                 <CardTitle className="text-lg sm:text-xl break-words">{question.title}</CardTitle>
                 <span className="rounded-full text-sm bg-secondary px-3 py-1 w-fit">
-                  {question.points} points
+                  {question.points} points • {questionTracker?.flag_found_count_map?.get(question.id) ?? "?"} solves
                 </span>
               </div>
               <CardDescription className="whitespace-pre-line break-words text-wrap">
@@ -213,6 +213,16 @@ function Attachments({ attachments }: AttachmentsProps) {
                   className="rounded-lg w-full object-cover max-h-48 cursor-pointer hover:opacity-90 transition-opacity outline outline-2 outline-black"
                   onClick={() => window.open(attachment.url, '_blank')} />
                 <span className="text-sm mt-2 text-muted-foreground break-words">{attachment.name}</span>
+                <Button
+                  variant="secondary"
+                  className="w-full justify-start mt-2"
+                  asChild
+                >
+                  <a href={attachment.url} download>
+                    <Download className="mr-2 h-4 w-4" />
+                    Download
+                  </a>
+                </Button>
               </div>
             ) : (
               <Button
