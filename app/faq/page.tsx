@@ -115,6 +115,19 @@ export default function Faq() {
             </AccordionContent>
           </AccordionItem>
 
+          <AccordionItem value="border">
+            <AccordionTrigger>Green Borders?</AccordionTrigger>
+            <AccordionContent>
+              <p>
+                If your team has captured a flag, then that problem will have a green border.
+              </p>
+              <br />
+              <p>
+                Thank you for the feedback! Keep them coming!
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+
           <AccordionItem value="hidden">
             <AccordionTrigger>Hidden Challenges?</AccordionTrigger>
             <AccordionContent className="space-y-3">
