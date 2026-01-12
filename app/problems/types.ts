@@ -25,6 +25,7 @@ export interface API {
 }
 
 export type Question = {
+  id: number;
   title: ReactNode;
   description: ReactNode;
   hints?: string[] | ReactNode;

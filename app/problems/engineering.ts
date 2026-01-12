@@ -3,12 +3,14 @@ import { Category, Question } from "./types"
 // Engineering/programming challenges from various CTF categories
 const questions: Question[] = [
   {
+    id: 2,
     title: "SQLi v1",
     description: "This is my first time learning SQL, checkout this simple auth page I made!\nBut it'll be of no use to you since you dont know my credentials 😎",
     link: "/archives/2025/sqli/basic-auth",
     points: 150,
   },
   {
+    id: 3,
     title: "Buffers v1",
     description: "Nothing is impossible in C\n\n Compiled using the following:\n gcc -o buffers1 -fno-stack-protector -z execstack -no-pie buffers.c",
     points: 50,
@@ -30,6 +32,7 @@ const questions: Question[] = [
     ]
   },
   {
+    id: 4,
     title: "I can write comments?!",
     description: "Mausemaster from 2m2t (2 mause 2 tools) just made a new comment section which he will be checking!",
     points: 250,

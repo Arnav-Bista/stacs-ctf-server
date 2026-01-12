@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getTeamId } from "./misc";
 
 export async function GET() {
+  const teams = db.prepare("SELECT * FROM teams");
   try {
-    const teams = db.prepare("SELECT * FROM teams");
     const result = teams.all();
     return NextResponse.json(
       result
@@ -51,9 +51,9 @@ export async function POST(request: NextRequest) {
     }
     let joinKey: number = 0;
     let keyExists = true;
+    const check = db.prepare("SELECT id FROM teams WHERE join_key = ?");
     while (keyExists) {
       joinKey = Math.floor(Math.random() * 900000) + 100000;
-      const check = db.prepare("SELECT id FROM teams WHERE join_key = ?");
       keyExists = check.get(joinKey) !== undefined;
     }
     const insert = db.prepare("INSERT INTO teams (name, join_key) VALUES (?, ?)");

@@ -12,8 +12,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import FlagSubmissionPopover from "@/app/submit/flag-submission-popover";
+import { useTrackerData } from "../tracker";
 
 export default function RenderQuestions({ slug }: { slug: string }) {
+  
+  const questionTracker = useTrackerData();
 
   return (
     <div className="px-4 sm:px-6 md:px-8">
@@ -29,7 +32,7 @@ export default function RenderQuestions({ slug }: { slug: string }) {
       <div className="space-y-6">
         {allQuestions.map((question, index) => (
           question.category === slug &&
-          <Card key={`question-${index}`} className="max-w-screen-md mx-auto">
+          <Card key={`question-${index}`} className={`max-w-screen-md mx-auto ${ questionTracker?.found_flag_ids.has(question.id) ? "border-green-600" : ""}`}>
             <CardHeader className="space-y-3">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                 <CardTitle className="text-lg sm:text-xl break-words">{question.title}</CardTitle>

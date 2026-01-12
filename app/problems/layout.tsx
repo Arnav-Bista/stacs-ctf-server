@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ProblemTrackerProvider } from "./tracker";
 
 export default function ProblemsLayout({
   children,
@@ -9,7 +9,9 @@ export default function ProblemsLayout({
 }>) {
   return (
     <div className="flex flex-col items-center p-6 gap-8">
-      {children}
+      <ProblemTrackerProvider>
+        {children}
+      </ProblemTrackerProvider>
     </div>
   );
 }
