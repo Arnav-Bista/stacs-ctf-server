@@ -2,15 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import db from "@/app/lib/db";
 import Flag from "@/app/lib/types/flag";
 import { getTeamById } from "../teams/misc";
+import checkRateLimit from "@/app/lib/rateLimit";
 
 interface SubmitFlagData {
   id: string,
   flag: string
 }
 
-export async function POST(request: NextRequest) {
-  try {
+const MIN_DELAY = 500;
 
+export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+  try {
     const data = await request.json() as Partial<SubmitFlagData>;
     if (!data.id) {
       return NextResponse.json(
@@ -25,6 +28,13 @@ export async function POST(request: NextRequest) {
         { error: "Team not found." },
         { status: 404 }
       );
+    }
+
+    if (!checkRateLimit(teamId)) {
+      return NextResponse.json(
+        { error: "Rate Limited! Y'all Submitting too fast." },
+        { status: 429 }
+      )
     }
 
     if (!data.flag) {
@@ -67,11 +77,14 @@ export async function POST(request: NextRequest) {
   catch (e) {
     console.log(e);
     return NextResponse.json(
-      { error: e, er: "unknown" },
+      { error: "How did we get here? Reach out to the STACS Devs Team :)"},
       { status: 500 }
     );
   }
-
-
-
+  finally {
+    const remainingTime = MIN_DELAY - (Date.now() - startTime);
+    if (remainingTime > 0) {
+      await new Promise(resolve => setTimeout(resolve, remainingTime));
+    }
+  }
 }
