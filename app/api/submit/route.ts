@@ -75,9 +75,16 @@ export async function POST(request: NextRequest) {
 
   }
   catch (e) {
+    if (e instanceof SyntaxError) {
+      return NextResponse.json(
+        { error: "Did you forget the data? Wait why are you hitting this endpoint manually?" },
+        { status: 400 }
+      );
+    }
+
     console.log(e);
     return NextResponse.json(
-      { error: "How did we get here? Reach out to the STACS Devs Team :)"},
+      { error: "How did we get here? Reach out to the STACS Devs Team :)" },
       { status: 500 }
     );
   }
