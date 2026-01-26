@@ -5,9 +5,9 @@ const questions: Question[] = [
   {
     id: 2,
     title: "SQLi v1",
-    description: "This is my first time learning SQL, checkout this simple auth page I made!\nBut it'll be of no use to you since you dont know my credentials 😎",
-    link: "/archives/2025/sqli/basic-auth",
-    points: 150,
+    description: "Day 1 of doing SQL. Just watched my first lecture from AYS (Academy of Youtube Shorts). I have secured my website so no one but those with a username AND a password can login!!",
+    link: "/problems/sqli/broken-login",
+    points: 100,
   },
   {
     id: 3,
