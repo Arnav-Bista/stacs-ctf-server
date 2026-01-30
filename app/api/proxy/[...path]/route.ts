@@ -2,8 +2,8 @@ import { NextRequest } from 'next/server';
 
 // Map of allowed last-path segments to upstream URLs
 const UPSTREAMS: Record<string, string> = {
-    calculatorone: 'http://localhost:8080/calculatorone',
-    calculatortwo: 'http://localhost:8080/calculatortwo',
+    calculatorone: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/calculatorone',
+    calculatortwo: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/calculatortwo',
 };
 
 const HOP_BY_HOP = new Set([
