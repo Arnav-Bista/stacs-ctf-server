@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,26 @@ export default function Calculator() {
     const [isLoading, setIsLoading] = useState(false);
     const [result, setResult] = useState<CalcSuccess | null>(null);
     const [error, setError] = useState<{ code: number; text: string } | null>(null);
+
+    // Initialize to the server-rendered fallback so SSR output matches,
+    // then update to the real hint on the client after mount.
+    const [hintText, setHintText] = useState<string>("Path captured by [...path]: ");
+    const [showHint, setShowHint] = useState<boolean>(false);
+
+    useEffect(() => {
+        const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+        if (/\/easy(\/|$)/.test(pathname)) {
+            setHintText("Zero is a very fun number to use in calculations.");
+        } else if (/\/medium(\/|$)/.test(pathname)) {
+            setHintText("If we add two very large numbers together, what happens?");
+        } else if (/\/hard(\/|$)/.test(pathname)) {
+            setHintText("I havent figured this one out yet lol");
+        } else {
+            const match = pathname.match(/\/problems\/calculator\/(.*)$/);
+            const tail = match ? match[1] : "";
+            setHintText(`Path captured by [...path]: ${tail || pathname}`);
+        }
+    }, []);
 
     async function handleSubmit(e: any) {
         e.preventDefault();
@@ -82,6 +102,7 @@ export default function Calculator() {
                     <img src="/cookiemonster.jpg" alt="Cookie Monster" className="w-24 h-24 mx-auto" />
                 </CardHeader>
                 <CardContent>
+                    <CardDescription className="text-center mb-4">This calculator is implemented as a single service for every team. Your goal is to provide malicious input causing the service to crash</CardDescription>
                     <form autoComplete="off" onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="a">Operand A</Label>
@@ -155,6 +176,32 @@ export default function Calculator() {
                             {isLoading ? "Calculating..." : "Calculate"}
                         </Button>
                     </form>
+                    {/* Hint button */}
+                <div className="mt-4 flex justify-center">
+                    <div className="mt-4 flex justify-center">
+                        <Button type="button" onClick={() => setShowHint(true)}>Hint</Button>
+
+                        {showHint && (
+                            <div className="fixed inset-0 items-center justify-center z-50 flex">
+                                <div className="absolute inset-0 bg-black/50" aria-hidden="true" />
+                                <div className="relative z-10 max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mx-4">
+                                    <div className="flex items-start justify-between">
+                                        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Hint</h3>
+                                        <button onClick={() => setShowHint(false)} className="cursor-pointer text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">✕</button>
+                                    </div>
+
+                                    <p className="mt-3 text-sm text-gray-700 dark:text-gray-300">
+                                        {hintText}
+                                    </p>
+
+                                    <div className="mt-4 flex justify-end">
+                                        <Button type="button" onClick={() => setShowHint(false)}>Close</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
                 </CardContent>
             </Card>
         </div>
