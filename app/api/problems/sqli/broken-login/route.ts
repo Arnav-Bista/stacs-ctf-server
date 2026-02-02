@@ -34,7 +34,6 @@ export async function POST(request: NextRequest) {
 
     const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
     const result = db.prepare(query).all();
-    console.log(result);
     
     if (result.length > 0) {
       return NextResponse.json({
