@@ -12,10 +12,26 @@ const questions: Question[] = [
   },
   {
     id: "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
-    title: "SQLi v1 - My Super Cool Items!",
+    title: "SQLi v2 - My Super Cool Items!",
     description: "Day 2 from AYS! My login got bypassed >:( I've disabled the login for now while I fix it. In the meantime, check out my product catalog! At least this endpoint is safe - it only reads from the products table. Not like anyone could access the users table from here... that'd be ridiculous!",
     link: "/problems/sqli/look-at-my-items",
     points: 200,
+  },
+  {
+    id: "ede6dff9-0936-4a52-8dc7-c705caa8b85c",
+    title: "SQLi v3 - The Oracle",
+    description: (
+      <>
+        <p>
+          Day 3 of AYS! I've pivoted to a new business - mystical item shop! Now users can check if items are in stock. YoutubeGPT told me to "limit information exposure" so now I only return YES or NO - no actual data! This means hackers can't steal my data anymore right? Much secure, very production!
+        </p>
+      </>
+    ),
+    link: "/problems/sqli/the-oracle",
+    points: 250,
+    hints: [
+      "Honestly? For the first hint i'll just tell you that 'Ancient Scroll' is one of the items (not really a hint)"
+    ]
   },
   {
     id: "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",

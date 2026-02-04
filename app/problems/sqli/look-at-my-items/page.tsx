@@ -24,7 +24,6 @@ export default function SQLiItems() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{errorMessage?: string, data: Responses[]} | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
 
 
   async function handleSubmit(e: React.FormEvent) {

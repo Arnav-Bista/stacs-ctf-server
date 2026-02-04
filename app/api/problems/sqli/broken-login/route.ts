@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import Database from 'better-sqlite3';
+import { open } from 'sqlite';
+import sqlite3 from 'sqlite3';
 
 interface BrokenLogin {
   username?: string,
@@ -7,19 +8,24 @@ interface BrokenLogin {
 }
 
 export async function POST(request: NextRequest) {
-  // TODO: Rate Limit
+  // TODO: Rate Limit (team-based)
+  let db = null;
+  let timeoutId: NodeJS.Timeout | null = null;
   try {
     const { username, password } = await request.json() as BrokenLogin;
-    if (!username || !password ) {
+    if (!username || !password) {
       return NextResponse.json(
         { success: false, message: "Username and password required" },
         { status: 400 }
       );
     }
 
-    const db = new Database(":memory:");
+    db = await open({
+      filename: ':memory:',
+      driver: sqlite3.Database
+    });
 
-    db.exec(`
+    await db.exec(`
       CREATE TABLE users (
         id INTEGER PRIMARY KEY,
         username TEXT,
@@ -27,14 +33,27 @@ export async function POST(request: NextRequest) {
       )
     `);
 
-    db.exec(`
+    await db.exec(`
       INSERT INTO users (id, username, password)
       VALUES (1, 'noobysqlinjection', 'youre_cracking_this_password_already??')
     `);
 
     const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
-    const result = db.prepare(query).all();
-    
+
+    // Set query timeout (5 seconds)
+    const timeoutPromise = new Promise((_, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(new Error('Query timeout: execution took too long'));
+      }, 5000);
+    });
+
+    const queryPromise = db.all(query);
+    const result = await Promise.race([queryPromise, timeoutPromise]) as any[];
+
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
     if (result.length > 0) {
       return NextResponse.json({
         success: true,
@@ -48,9 +67,24 @@ export async function POST(request: NextRequest) {
       }, { status: 401 });
     }
   } catch (error) {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    const errorMessage = String(error);
+    if (errorMessage.includes('timeout')) {
+      return NextResponse.json({
+        success: false,
+        message: "Query timeout: execution took too long"
+      }, { status: 408 });
+    }
     return NextResponse.json({
       success: false,
-      message: String(error)
+      message: errorMessage
     }, { status: 500 });
+  }
+  finally {
+    if (db) {
+      await db.close();
+    }
   }
 }

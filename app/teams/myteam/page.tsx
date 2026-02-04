@@ -5,33 +5,22 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import Team from '@/app/lib/types/team';
-
-interface Message {
-  isError: boolean,
-  message: string
-}
-
 
 
 export default function TeamView() {
     const router = useRouter();
     const [team, setTeam] = useState<Team>(() => {
-        const storedTeam = localStorage.getItem('team');
-        if (storedTeam) {
-            return JSON.parse(storedTeam);
-        }
-        return { id: 0, name: '', join_key: '' };
+        const storedTeam = typeof window !== 'undefined' ? localStorage.getItem('team') : null;
+        return storedTeam ? JSON.parse(storedTeam) : { id: 0, name: '', join_key: '' };
     });
 
     useEffect(() => {
-        const storedTeam = localStorage.getItem('team');
-        if (!storedTeam) {
+        if (team.id === 0 && team.name === '') {
             router.push('/teams');
         }
-    }, [router]);
+    }, [router, team]);
 
     function leaveTeam(){
         localStorage.removeItem('team');
