@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import Database from 'better-sqlite3';
+import { open } from 'sqlite';
+import sqlite3 from 'sqlite3';
 
 interface LookAtMyItems {
   query?: string
 }
 
 export async function POST(request: NextRequest) {
-  // TODO: Rate Limit
+  let db = null;
+  let timeoutId: NodeJS.Timeout | null = null;
+  // TODO: Rate Limit (team-based)
   try {
     const { query: input } = await request.json() as LookAtMyItems;
 
@@ -16,9 +19,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    const db = new Database(":memory:");
+    db = await open({
+      filename: ':memory:',
+      driver: sqlite3.Database
+    });
 
-    db.exec(`
+    await db.exec(`
       CREATE TABLE users (
         id INTEGER PRIMARY KEY,
         username TEXT,
@@ -26,7 +32,7 @@ export async function POST(request: NextRequest) {
       );
     `);
 
-    db.exec(`
+    await db.exec(`
       CREATE TABLE items (
         id INTEGER PRIMARY KEY,
         name TEXT,
@@ -35,7 +41,7 @@ export async function POST(request: NextRequest) {
       );
     `);
 
-    db.exec(`
+    await db.exec(`
       INSERT INTO users (id, username, password)
       VALUES (1, 'xX_admin_Xx', 'flag_{they-can-use-any-attack-vectors!}')
     `);
@@ -47,10 +53,10 @@ export async function POST(request: NextRequest) {
       ['Hints for this CTF!', 'We may be bribed', '£999.99'],
       ['The Flag', 'The one and only (we need funding)', '£999.99'],
       ['Your Smile', ':) (This was kinda cringe)', 'Priceless'],
-      ];
+    ];
 
     for (let item of items) {
-      db.exec(`
+      await db.exec(`
       INSERT INTO items (name, details, price)
       VALUES ('${item[0]}', '${item[1]}', '${item[2]}')`
       );
@@ -58,11 +64,32 @@ export async function POST(request: NextRequest) {
 
 
     const query = `SELECT * FROM items WHERE name LIKE '%${input}%'`;
-    const result = db.prepare(query).all();
+
+    // Set query timeout (5 seconds)
+    const timeoutPromise = new Promise((_, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(new Error('Query timeout: execution took too long'));
+      }, 5000);
+    });
+
+    const queryPromise = db.all(query);
+    const result = await Promise.race([queryPromise, timeoutPromise]) as any[];
     return NextResponse.json(result);
   } catch (error) {
-    console.log(String(error));
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    const errorMessage = String(error);
+    console.log(errorMessage);
     // TODO: Decide whether to give or not give error messages
-    return NextResponse.json(String(error), { status: 500 });
+    if (errorMessage.includes('timeout')) {
+      return NextResponse.json("Query timeout: execution took too long", { status: 408 });
+    }
+    return NextResponse.json(errorMessage, { status: 500 });
+  }
+  finally {
+    if (db) {
+      await db.close();
+    }
   }
 }
