@@ -3,6 +3,8 @@ import forensics from "./forensics";
 import engineering from "./engineering";
 import llm from "./llm";
 import exploitdev from "./exploitdev";
+import misc from "./misc";
+import crypto from "./crypto";
 import malware from "./malware";
 
 // Add more categories as collaborators create them
@@ -12,6 +14,8 @@ export const allCategories: Category[] = [
   engineering,
   llm,
   exploitdev,
+  misc,
+  crypto,
   malware
 ];
 

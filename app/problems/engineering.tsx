@@ -34,6 +34,17 @@ const questions: Question[] = [
     ]
   },
   {
+    id: "f7a8b9c0-d1e2-4f3a-5b6c-7d8e9f0a1b2c",
+    title: "SQLi v4 - My Messages",
+    description: "Day 4 of AYS! I learned about 'parameterized queries' from the comments section (thanks hackers!). Now I'm using them EVERYWHERE for user registration - 100% SQLi proof! Built a secure messaging system where users can view their personal messages. Since the username is stored safely in the database, it's totally safe to use it in queries later, right? What could possibly go wrong?",
+    link: "/problems/sqli/my-messages",
+    points: 300,
+    hints: [
+      "The registration is secure, but what about when your username is used later?",
+      "Think about what happens when stored data becomes part of a query"
+    ]
+  },
+  {
     id: "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
     title: "Buffers v1",
     description: "Nothing is impossible in C\n\n Compiled using the following:\n gcc -o buffers1 -fno-stack-protector -z execstack -no-pie buffers.c",
