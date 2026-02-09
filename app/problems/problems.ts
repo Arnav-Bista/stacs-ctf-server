@@ -3,6 +3,8 @@ import forensics from "./forensics";
 import engineering from "./engineering";
 import llm from "./llm";
 import exploitdev from "./exploitdev";
+import misc from "./misc";
+import crypto from "./crypto";
 
 // Add more categories as collaborators create them
 // Each category file should export a Category object with questions
@@ -10,7 +12,9 @@ export const allCategories: Category[] = [
   forensics,
   engineering,
   llm,
-  exploitdev
+  exploitdev,
+  misc,
+  crypto
 ];
 
 // Helper to get all questions with their category slug attached
