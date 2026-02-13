@@ -1,0 +1,5 @@
+Your flag is the following
+
+<owner>-648c662b4486c435a676fc6737245d105d1a5685
+
+Where <owner> is owner of the vulnerable file.

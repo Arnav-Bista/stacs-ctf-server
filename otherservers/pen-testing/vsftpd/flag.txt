@@ -1,0 +1,6 @@
+Your flag is the following
+
+<CVE>-1f94e523be6e8ae3e24fb54aa40e56102d81f0d3
+
+Where <CVE> is the CVE of the vulnerability you exploited to get in in
+upper case (e.g. CVE-xxxx-xxxx)

@@ -1,0 +1,69 @@
+Welcome to the pen testing labs for this years CTF.
+
+Please read the following carefully:
+
+Rules
+-----
+
+- You MUST NOT under any circumstances attempt to access any systems
+  other than the ones listed further on in this document. Any attempt
+  to do so may constitute an offence under the Computer Misuse Act
+  1990 or other relevant legislation or internal policy.
+
+- The labs are deliberately not connected to the internet as they
+  contain vulnerabilities. You MUST NOT connect them to the internet.
+
+- The labs are built using docker images and all are solvable. You
+  must solve them in the intended manner. Any attempt to inspect or
+  otherwise obtain the flags without exploiting the configured
+  vulnerabilities is cheating and may result in disqualification.
+
+Now, with the boring stuff out of the way, here is the fun stuff.
+
+Targets
+-------
+
+You have 3 "machines" (in reality docker containers), each with a
+specific vulnerability and a flag to get once you break in. Each target
+is more difficult than the last so I suggest you start with the first
+one and work your way up.
+
+As you may have noticed, your machine is called attacker.
+
+Below are the IP addresses for all devices, you are all on the same
+internal network.
+
+attacker - 10.5.0.10
+victim_1 - 10.5.0.11
+victim_2 - 10.5.0.12
+victim_3 - 10.5.0.13
+
+Remember: ONLY TARGET THESE ADDRESSES!
+
+Shells
+------
+
+You are currently in a bash shell. You may find it beneficial to have
+multiple attacker shells open at once. If you want another shell, open a
+new terminal on your lab machine and run the new-shell.sh script. You
+will now have a second shell.
+
+IMPORTANT: Do not close your original shell (the shell that opened when
+you ran the start script). If you do, the labs will be reset.
+
+
+Tools
+-----
+
+You have a limited number of tools available to you along with some
+standard Linux commands:
+
+ - nano (A text editor)
+ - vim (Another text editor)
+ - nmap (https://nmap.org/docs.html)
+ - nmapAutomator.sh (https://github.com/21y4d/nmapAutomator)
+ - nc (https://en.linuxportal.info/manuals/n/nc-traditional-linux-parancs)
+
+If you need any help with anything, just ask one of the CTF organisers.
+
+Have fun! :)
