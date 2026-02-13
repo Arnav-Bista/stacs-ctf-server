@@ -37,8 +37,11 @@
     "react-syntax-highlighter": "^15.6.6",
     "recharts": "2.15.4",
     "sql.js": "^1.13.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^13.0.0",
     "ws": "^8.18.3"
   },
   "devDependencies": {
@@ -61,6 +64,7 @@
     "onlyBuiltDependencies": [
       "better-sqlite3",
       "sharp",
+      "sqlite3",
       "unrs-resolver"
     ],
     "ignoredBuiltDependencies": [

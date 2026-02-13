@@ -2,7 +2,7 @@ import { Category, Question } from "./types"
 
 const questions: Question[] = [
   {
-    id: 1,
+    id: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
     title: "My Password v1",
     description: "I saw how this dude hid his password inside an image and showed it on stream! But this guy is a fake terminal user, he doesnt know much...",
     hints: ["Text Editor?", "placeholder fr", "cat??"],
@@ -16,7 +16,7 @@ const questions: Question[] = [
     ]
   },
   {
-    id: 6,
+    id: "f6e5d4c3-b2a1-4098-7654-321fedcba987",
     title: "https://us-tuna-sounds-images.voicemod.net/5b23cd9b-0c2d-471f-8589-9e6bdee73d4c-1680393318917.jpeg",
     description: "What the dog doing?",
     points: 200,

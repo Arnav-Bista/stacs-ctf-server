@@ -31,7 +31,7 @@ export default function RenderQuestions({ slug }: { slug: string }) {
       <div className="space-y-6">
         {filteredQuestions.map((question) => {
           const isSolved = questionTracker?.found_flag_ids.has(question.id);
-          const solveCount = questionTracker?.flag_found_count_map?.get(question.id) ?? "?";
+          const solveCount = questionTracker?.flag_found_count_map?.get(question.id) ?? "0";
 
           return (
             <Card key={question.id} className={`max-w-screen-md mx-auto ${isSolved ? "border-2 border-green-600" : ""}`}>
@@ -115,7 +115,7 @@ function Hints({ hints }: { hints?: string[] | React.ReactNode }) {
   if (!hints || (Array.isArray(hints) && hints.length === 0)) return null;
 
   return (
-    <Accordion type="single" collapsible className="border rounded-md">
+    <Accordion type="single" collapsible className="border rounded-md my-4">
       <AccordionItem value="hints-wrapper" className="border-none">
         <AccordionTrigger className="px-4 hover:no-underline">
           Need hints?

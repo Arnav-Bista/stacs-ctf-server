@@ -6,32 +6,32 @@ import Team from "../lib/types/team";
 // My naming skills are not the best I admit
 
 export interface ProblemTracker {
-  found_flag_ids: Set<number>,
-  flag_found_count_map: Map<number, number> | null,
+  found_flag_ids: Set<string>,
+  flag_found_count_map: Map<string, number> | null,
   isLoading: boolean,
   isError: boolean
 }
 
 type IntermeidateDataTracker = {
-  flag_id: number
+  flag_id: string
 }[]
 
 type IntermeidateDataFlagFound = {
-  id: number,
+  id: string,
   discovered: number
 }[]
 
 const ProblemTrackerContext = createContext<ProblemTracker | null>(null);
 
 
-async function fetchFlagTracker(team_id: string | number | null): Promise<Set<number> | null> {
+async function fetchFlagTracker(team_id: string | number | null): Promise<Set<string> | null> {
   if (team_id === null) {
     return null;
   }
   try {
     const response = await fetch(`/api/teams/tracker?team_id=${team_id}`);
     const data: IntermeidateDataTracker = await response.json();
-    const set: Set<number> = new Set();
+    const set: Set<string> = new Set();
     data.forEach(e => set.add(e.flag_id));
     return set;
   }
@@ -40,11 +40,11 @@ async function fetchFlagTracker(team_id: string | number | null): Promise<Set<nu
   }
 }
 
-async function fetchFlagsFound(): Promise<Map<number, number> | null> {
+async function fetchFlagsFound(): Promise<Map<string, number> | null> {
   try {
     const response = await fetch("/api/flags/discovered");
     const data: IntermeidateDataFlagFound = await response.json();
-    const map: Map<number, number> = new Map();
+    const map: Map<string, number> = new Map();
     data.forEach(e => map.set(e.id, e.discovered));
     return map;
   }
@@ -57,8 +57,8 @@ async function fetchFlagsFound(): Promise<Map<number, number> | null> {
 export function ProblemTrackerProvider({ children }: { children?: ReactNode }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [data, setData] = useState<Set<number> | null>(null);
-  const [flagFoundData, setFlagFoundData] = useState<Map<number, number> | null>(null);
+  const [data, setData] = useState<Set<string> | null>(null);
+  const [flagFoundData, setFlagFoundData] = useState<Map<string, number> | null>(null);
   useEffect(() => {
 
     async function fetchData(team_id: string | number | null) {
@@ -95,7 +95,7 @@ export function ProblemTrackerProvider({ children }: { children?: ReactNode }) {
     <ProblemTrackerContext.Provider value={{
       found_flag_ids: data ?? new Set(),
       flag_found_count_map: flagFoundData,
-      isError: error === null,
+      isError: error !== null,
       isLoading: loading
     }}>
       {children}
