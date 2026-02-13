@@ -1,0 +1,42 @@
+services:
+  attacker:
+    image: ctf_25_attacker:latest
+    stdin_open: true # equivalent to -i
+    tty: true
+    hostname: attacker
+    networks:
+      ctf_net:
+        ipv4_address: 10.5.0.10
+
+  victim_1:
+    image: ctf_25_victim_1:latest
+    hostname: victim_1
+    restart: unless-stopped
+    networks:
+      ctf_net:
+        ipv4_address: 10.5.0.11
+
+  # Victim 2 has a habit of seg faulting when the exploit is over so
+  # make sure we always restart it...
+  victim_2:
+    image: ctf_25_victim_2:latest
+    hostname: victim_2
+    restart: unless-stopped
+    networks:
+      ctf_net:
+        ipv4_address: 10.5.0.12
+
+  victim_3:
+    image: ctf_25_victim_3:latest
+    hostname: victim_3
+    restart: unless-stopped
+    networks:
+      ctf_net:
+        ipv4_address: 10.5.0.13
+networks:
+  ctf_net:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 10.5.0.0/24

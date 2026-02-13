@@ -26,3 +26,6 @@
 25,Symmetric,AES MD5 (Just hashing it out),250,flag_{hashing_isnt_encryption!!!},,,
 26,Symmetric,AES ORACLE (Scyr),400,flag_{seems_ecb_is_vry_insecure},,,
 27,Symmetric,Uncrackable,150,flag_{its-called-one-time-bro-@_@},,,
+28,Pen Testing,Victim 1,150,5269-5f9a3c2ca6ffda66c1e1b0f7a39887a8a43eabe8,,,
+29,Pen Testing,Victim 2,250,CVE-2011-2523-1f94e523be6e8ae3e24fb54aa40e56102d81f0d3,,,
+30,Pen Testing,Victim 3,350,www-data-648c662b4486c435a676fc6737245d105d1a5685,,,
