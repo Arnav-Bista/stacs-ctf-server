@@ -4,6 +4,8 @@ import { NextRequest } from 'next/server';
 const UPSTREAMS: Record<string, string> = {
     calculatorone: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/calculatorone',
     calculatortwo: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/calculatortwo',
+    message: 'http://127.0.0.1:8080/message', //'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/messages',
+    getallmessages: 'http://127.0.0.1:8080/getallmessages', //'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/getallmessages',
 };
 
 const HOP_BY_HOP = new Set([
@@ -20,13 +22,38 @@ const HOP_BY_HOP = new Set([
 async function proxy(request: Request) {
     const reqUrl = new URL(request.url);
     const segments = reqUrl.pathname.split('/').filter(Boolean);
-    const last = segments[segments.length - 1] ?? '';
 
-    const upstreamBase = UPSTREAMS[last];
+    // find the segment after the 'proxy' segment, e.g. /api/proxy/<key>/... -> key
+    const proxyIndex = segments.indexOf('proxy');
+    const key = proxyIndex >= 0 && segments.length > proxyIndex + 1 ? segments[proxyIndex + 1] : segments[segments.length - 1] ?? '';
+    const restSegments = proxyIndex >= 0 && segments.length > proxyIndex + 2 ? segments.slice(proxyIndex + 2) : [];
+
+    // Special handling: client uses '/messages' endpoints but upstream exposes '/message' and '/getallmessages'
+    let upstreamBase: string | undefined;
+    if (key === 'messages') {
+        if (request.method === 'GET' && restSegments.length === 0) {
+            // list all messages -> upstream /getallmessages
+            upstreamBase = UPSTREAMS['getallmessages'];
+        } else {
+            // create/get/delete specific -> upstream /message (append id if present)
+            upstreamBase = UPSTREAMS['message'];
+        }
+    } else {
+        upstreamBase = UPSTREAMS[key];
+    }
+
     if (!upstreamBase) return new Response('Not found', { status: 404 });
 
-    const target = new URL(upstreamBase);
+    // Build target URL by appending any remaining path segments to the upstream base
+    let target = new URL(upstreamBase);
+    if (restSegments.length > 0) {
+        // ensure no duplicate slashes
+        const suffix = restSegments.map(encodeURIComponent).join('/');
+        // preserve any existing path on upstreamBase
+        target = new URL(target.toString().replace(/\/+$/, '') + '/' + suffix);
+    }
     target.search = reqUrl.search; // forward query string
+    console.log(`Proxying request for ${key}${restSegments.length ? '/' + restSegments.join('/') : ''} to ${target.toString()}`);
 
     // Forward headers (remove host and hop-by-hop headers)
     const forwardHeaders = new Headers(request.headers);
