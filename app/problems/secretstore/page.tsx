@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-interface Created { id: string }
+interface Created { message: string }
 interface ReadResult { value?: any }
 
 export default function SecretStorePage() {
@@ -55,9 +55,13 @@ export default function SecretStorePage() {
             try {
                 const parsed = JSON.parse(bodyText);
                 if (parsed?.flag) setFlag(parsed.flag);
-                if (parsed?.id) setCreateResp({ id: parsed.id });
+                if (parsed?.message) {
+                    setCreateResp({ message: parsed.message }) 
+                } else if (bodyText.trim()) {
+                    setCreateResp({ message: bodyText.trim() });
+                } 
             } catch (e) {
-                if (bodyText.trim()) setCreateResp({ id: bodyText.trim() });
+                if (bodyText.trim()) setCreateResp({ message: bodyText.trim() });
             }
 
             setSecret("");
@@ -121,7 +125,7 @@ export default function SecretStorePage() {
                                 </div>
 
                                 {createResp && (
-                                    <div className="text-sm font-medium text-green-600">Created ID: {createResp.id}</div>
+                                    <div className="text-sm font-medium text-green-600">{createResp.message}</div>
                                 )}
 
                                 <Button type="submit" disabled={isLoading} className="w-full">

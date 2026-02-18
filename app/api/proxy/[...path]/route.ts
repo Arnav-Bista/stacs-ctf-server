@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 const UPSTREAMS: Record<string, string> = {
     calculatorone: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/calculatorone',
     calculatortwo: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/calculatortwo',
-    message: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/messages',
+    message: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/message',
     getallmessages: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/getallmessages',
     bigarray: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/bigarray',
 };
@@ -58,6 +58,8 @@ async function proxy(request: Request) {
     }
     target.search = reqUrl.search; // forward query string
 
+    console.log(`Proxying request: ${request.method} ${reqUrl.pathname} -> ${target.pathname}`);
+
     // Forward headers (remove host and hop-by-hop headers)
     const forwardHeaders = new Headers(request.headers);
     forwardHeaders.delete('host');
@@ -76,6 +78,8 @@ async function proxy(request: Request) {
     };
 
     const upstreamRes = await fetch(target.toString(), init);
+
+    console.log(`Received response from upstream: ${upstreamRes.status} ${upstreamRes.statusText}`);
 
     // Build response headers, filtering hop-by-hop headers
     const responseHeaders = new Headers();
