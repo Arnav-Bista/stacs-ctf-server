@@ -16,12 +16,11 @@ export default function MessagesPage() {
 
     const [content, setContent] = useState<string>("");
     const [fetchId, setFetchId] = useState<string>("");
-    const [deleteId, setDeleteId] = useState<string>("");
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<{ code: number; text: string } | null>(null);
 
-    const [created, setCreated] = useState<Created | null>(null);
+    const [responseMessage, setResponseMessage] = useState<Created | null>(null);
     const [message, setMessage] = useState<Message | null>(null);
     const [messages, setMessages] = useState<Message[] | null>(null);
     const [flag, setFlag] = useState<string | null>(null);
@@ -36,7 +35,7 @@ export default function MessagesPage() {
         setError(null);
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/proxy/messages`, { method: "GET" });
+            const res = await fetch(`/api/proxy/message`, { method: "GET" });
             const bodyText = await res.text();
             if (!res.ok) {
                 setError({ code: res.status, text: bodyText });
@@ -76,10 +75,10 @@ export default function MessagesPage() {
     async function handleCreate(e: any) {
         e.preventDefault();
         setError(null);
-        setCreated(null);
+        setResponseMessage(null);
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/proxy/messages`, {
+            const res = await fetch(`/api/proxy/message`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ content }),
@@ -96,11 +95,11 @@ export default function MessagesPage() {
                     setFlag(parsed.flag);
                 }
                 if (parsed?.id) {
-                    setCreated({ id: parsed.id });
+                    setResponseMessage({ id: parsed.id });
                 }
             } catch (e) {
                 // not JSON - show raw text as created id or message
-                if (bodyText.trim()) setCreated({ id: bodyText.trim() });
+                if (bodyText.trim()) setResponseMessage({ id: bodyText.trim() });
             }
             setContent("");
             await fetchAll();
@@ -117,7 +116,7 @@ export default function MessagesPage() {
         setMessage(null);
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/proxy/messages/${encodeURIComponent(fetchId)}`, { method: "GET" });
+            const res = await fetch(`/api/proxy/message/${encodeURIComponent(fetchId)}`, { method: "GET" });
             const bodyText = await res.text();
             if (!res.ok) {
                 setError({ code: res.status, text: bodyText });
@@ -150,7 +149,10 @@ export default function MessagesPage() {
         setError(null);
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/proxy/messages/${encodeURIComponent(deleteId)}`, { method: "DELETE" });
+
+            const deleteId = e.target[0].value;
+
+            const res = await fetch(`/api/proxy/message/${encodeURIComponent(deleteId)}`, { method: "DELETE" });
             const bodyText = await res.text();
             if (!res.ok) {
                 setError({ code: res.status, text: bodyText });
@@ -160,10 +162,9 @@ export default function MessagesPage() {
 
             if (bodyText.trim()) {
                 // show confirmation as created for visibility
-                setCreated({ id: bodyText.trim() });
+                setResponseMessage({ id: bodyText.trim() });
             }
             
-            setDeleteId("");
             await fetchAll();
         } catch (e) {
             setError({ code: 0, text: String(e) });
@@ -178,10 +179,10 @@ export default function MessagesPage() {
                 <Button onClick={() => router.back()}>Back</Button>
             </div>
 
-            <Card className="w-full max-w-2xl">
+            <Card className="w-full max-w-4xl">
                 <CardHeader>
-                    <CardTitle>Message Board</CardTitle>
-                    <CardDescription>Create, view, list, and delete messages for everyone to see!!</CardDescription>
+                    <CardTitle>Cookie Message Board</CardTitle>
+                    <CardDescription>MAKE MESSAGES, PUT COOKIE IN MESSAGES, YUM YUM COOKIE</CardDescription>
                     <img src="/cookiemonster.jpg" alt="Cookie Monster" className="w-24 h-24 mx-auto" />
                 </CardHeader>
 
@@ -201,8 +202,8 @@ export default function MessagesPage() {
                                     />
                                 </div>
 
-                                {created && (
-                                    <div className="text-sm font-medium text-green-600">Created id: {created.id}</div>
+                                {responseMessage && (
+                                    <div className="text-sm font-medium text-green-600">Response: {responseMessage.id}</div>
                                 )}
 
                                 <Button type="submit" disabled={isLoading} className="w-full">
@@ -224,11 +225,6 @@ export default function MessagesPage() {
                                     </div>
                                 )}
 
-                                <form onSubmit={handleDelete} className="space-y-2">
-                                    <Label htmlFor="deleteId">Delete Message By ID</Label>
-                                    <Input id="deleteId" value={deleteId} onChange={(e) => setDeleteId(e.target.value)} />
-                                    <Button type="submit" disabled={isLoading} className="mt-2">Delete</Button>
-                                </form>
                             </div>
                         </div>
 
@@ -246,7 +242,7 @@ export default function MessagesPage() {
 
                             <div className="space-y-3 max-h-[480px] overflow-auto">
                                 {messages && messages.length === 0 && (
-                                    <div className="text-sm text-muted-foreground">No messages yet.</div>
+                                    <div className="text-sm text-muted-foreground">No messages loaded...</div>
                                 )}
                                 {messages && messages.map((m) => (
                                     <div key={m.id} className="p-3 border rounded">
@@ -256,6 +252,10 @@ export default function MessagesPage() {
                                                 <div className="text-sm text-muted-foreground">{m.id}</div>
                                             </div>
                                         </div>
+                                        <form onSubmit={handleDelete} className="mt-2">
+                                            <input type="hidden" value={m.id} />
+                                            <Button type="submit" size={"sm" as any} variant="destructive" disabled={isLoading}>Delete</Button>
+                                        </form>
                                     </div>
                                 ))}
                             </div>

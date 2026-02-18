@@ -4,8 +4,9 @@ import { NextRequest } from 'next/server';
 const UPSTREAMS: Record<string, string> = {
     calculatorone: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/calculatorone',
     calculatortwo: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/calculatortwo',
-    message: 'http://127.0.0.1:8080/message', //'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/messages',
-    getallmessages: 'http://127.0.0.1:8080/getallmessages', //'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/getallmessages',
+    message: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/messages',
+    getallmessages: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/getallmessages',
+    bigarray: 'https://ekh9.teaching.cs.st-andrews.ac.uk/ctfchallenges/bigarray',
 };
 
 const HOP_BY_HOP = new Set([
@@ -28,9 +29,9 @@ async function proxy(request: Request) {
     const key = proxyIndex >= 0 && segments.length > proxyIndex + 1 ? segments[proxyIndex + 1] : segments[segments.length - 1] ?? '';
     const restSegments = proxyIndex >= 0 && segments.length > proxyIndex + 2 ? segments.slice(proxyIndex + 2) : [];
 
-    // Special handling: client uses '/messages' endpoints but upstream exposes '/message' and '/getallmessages'
+    // Special handling: client uses '/message' endpoints but upstream exposes '/message' and '/getallmessages'
     let upstreamBase: string | undefined;
-    if (key === 'messages') {
+    if (key === 'message') {
         if (request.method === 'GET' && restSegments.length === 0) {
             // list all messages -> upstream /getallmessages
             upstreamBase = UPSTREAMS['getallmessages'];
@@ -38,6 +39,9 @@ async function proxy(request: Request) {
             // create/get/delete specific -> upstream /message (append id if present)
             upstreamBase = UPSTREAMS['message'];
         }
+    } else if (key === 'bigarray') {
+        // For bigarray, we want to forward to the same endpoint regardless of the next segment, since the backend handles routing based on method and body
+        upstreamBase = UPSTREAMS['bigarray'];
     } else {
         upstreamBase = UPSTREAMS[key];
     }
@@ -53,7 +57,6 @@ async function proxy(request: Request) {
         target = new URL(target.toString().replace(/\/+$/, '') + '/' + suffix);
     }
     target.search = reqUrl.search; // forward query string
-    console.log(`Proxying request for ${key}${restSegments.length ? '/' + restSegments.join('/') : ''} to ${target.toString()}`);
 
     // Forward headers (remove host and hop-by-hop headers)
     const forwardHeaders = new Headers(request.headers);
@@ -84,6 +87,12 @@ async function proxy(request: Request) {
     if (!responseHeaders.has('access-control-allow-origin')) {
         responseHeaders.set('access-control-allow-origin', '*');
     }
+
+    // If 500 response with the word "crashed" then this is expected, print an explanation in the console for clarity
+    if (upstreamRes.status === 500) {
+        console.warn(`Upstream server responded with 500. This is a FAKE CRASH, everything is fine please ignore, the next line will be a 500 error, IGNORE IT :)`); 
+    }
+
 
     return new Response(upstreamRes.body, {
         status: upstreamRes.status,
