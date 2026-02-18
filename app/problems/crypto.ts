@@ -19,6 +19,21 @@ const questions: Question[] = [
         url: "/2026/second.png"
       }
     ]
+  },
+  {
+    id: "1924050a-6107-4db5-83bc-8e088b10ffc3",
+    title: "Out of Passwords",
+    description: "We've upgraded our OTP system. Now we're making sure that we're changing up our keys haha.\nIt just took a bit of work adjusting it to work on our new system.\nIdk if its because we cracked windows vista but it can only accept up to 16 byte data structures.",
+    points: 50,
+    api: {
+      endpoint: "/api/problems/crypto",
+      method: "POST",
+      description: "Send your payload to be encrypted.",
+      requestFormat: {
+        type: "json",
+        example: '{ "question": "out-of-passwords", "payload": "I only care about BTC crypto." }'
+      },
+    }
   }
 ]
 
