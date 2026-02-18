@@ -31,7 +31,7 @@ def encrypt(plaintext: bytes) -> bytes:
         return str(e)
 
 
-@app.route('/otherservers/crypto/out-of-passwords', methods=['POST'])
+@app.route('/crypto/out-of-passwords', methods=['POST'])
 def encrypt_handler():
     try:
         data = request.get_json(force=True, cache=True)

@@ -6,7 +6,7 @@ const questions: Question[] = [
     id: "57504b47-c80f-4b86-8866-c45c3268887f",
     description: "This MATHEMATICALLY IMPOSSIBLE TO DECRYPT method of encryptying is unbeatable 🤓! You know what!? I'm going to show you my encrypted image!          oh yeah?!?! Take two of them!! Yeah I BET you can't do anything with it 😎. IYKYK 😔✊✌️",
     title: "Cracking the Uncrackable",
-    points: 100,
+    points: 25,
     attachments: [
       {
         name: "The First",
@@ -28,7 +28,7 @@ const questions: Question[] = [
     api: {
       endpoint: "/crypto/out-of-passwords",
       method: "POST",
-      description: "Send your payload to be encrypted as a bytestring converted to a long.\nYou can use the PyCryptoDome library's bytes_to_long() & long_to_bytes() functions.\nData will be returned in the format { 'data': bytes_as_long }",
+      description: "Send your payload to be encrypted as a bytestring converted to a long.\nYou can use the PyCryptoDome library's bytes_to_long() & long_to_bytes() functions.\nData will be returned as a long representation of a bytestring.",
       requestFormat: {
         type: "json",
         example: '{ "data": bytes_as_long }'
@@ -38,8 +38,30 @@ const questions: Question[] = [
   {
     id: "33e9de1b-d25d-444a-8d41-835e74fc3087",
     title: "Rule of Two",
-    description: "I've always wondered why people use the product of two primes as a modulus for RSA.\n\nWouldn't it be *so much*, literally twice as simple if we just used one?\nThink about all that sweet processing power we'd save.\nWhy hasn't anyone thought of this??\n\nI bet you can't get my flag from this encrypted ciphertext.\n\nExponent:\ne = 65537\n\nPrime Modulus:\nn = 754504884488355992613475443703197599305472667423685663716426820258038260238341189837002895867489655037509404560697913282037450724137506302619022107255986292722755242991070733926076121552306935170095264015735976922876540696445988233036660723472298434191295086941047447198115204429821\n\nEncrypted Ciphertext:\n148617791026989894858369832552035494039268594239592154462884966640982386546057192504469289129998196008533584484053085096349365640011383213053277642784744255553050542972623418255804552679289507894211631026960831981078742556731837145259588062815863765958076544273171133271203945961735",
+    description: "I've always wondered why people use the product of two primes as a modulus for RSA.\n\nWouldn't it be *so much*, literally twice as simple if we just used one?\nThink about all that sweet processing power we'd save.\nWhy hasn't anyone thought of this??\n\nI bet you can't get my flag from this encrypted ciphertext.",
     points: 50,
+    attachments: [
+      {
+        name: "RSA parameters",
+        type: "file",
+        url: "/rule-of-two.txt"
+      }
+    ]
+  },
+  {
+    id: "18d1f180-4e53-41ba-bc98-b159c6d9accf",
+    title: "Testing Testing",
+    description: "I bet you can't crack this implementation!\nWe aren't using ECB anymore for AES, turns out that scheme got deprecated ages ago...\nNow we've got CTR - its uncrackable according to our sources.\n\nEven looking tt our scheme - its mathematically secure! Hahahahaha!\nWait - did our intern leave the test output in there?!",
+    points: 50,
+    api: {
+      endpoint: "/crypto/testing-testing",
+      method: "POST",
+      description: "Send your payload to be encrypted as a bytestring converted to a long.\nYou can use the PyCryptoDome library's bytes_to_long() & long_to_bytes() functions. Data will be returned as b64.",
+      requestFormat: {
+        type: "json",
+        example: '{ "data": bytes_as_long }'
+      }
+    }
   }
 ]
 
