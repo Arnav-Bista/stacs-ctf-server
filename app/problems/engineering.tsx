@@ -68,11 +68,18 @@ const questions: Question[] = [
   },
   {
     id: "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
-    title: "I can write comments?!",
-    description: "Mausemaster from 2m2t (2 mause 2 tools) just made a new comment section which he will be checking!",
+    title: "Yes, read my clean thoughts.",
+    description: "The admins wants to know your thoughts through commenting. But maybe too much freedom in how you can comment stuff...",
     points: 250,
-    link: "/archives/2025/web/tokens",
+    link: "/problems/clean-thoughts",
   },
+  {
+    id: "2804906d-dfc9-445e-b0dc-0a94a75823fb",
+    title: "Paper Trail",
+    description: "Someone left the filing cabinet unlocked. Not every document is meant for your eyes — but that's never stopped anyone before.",
+    points: 200,
+    link: "/problems/paper-trail"
+  }
 ];
 
 

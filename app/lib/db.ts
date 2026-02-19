@@ -35,6 +35,15 @@ db.exec(`
     key TEXT PRIMARY KEY,
     value TEXT
   );
+
+  CREATE TABLE IF NOT EXISTS xss_comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    browser_id TEXT NOT NULL,
+    data TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_xss_comments_browser_id ON xss_comments(browser_id);
 `
 );
 
