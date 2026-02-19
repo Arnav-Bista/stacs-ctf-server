@@ -53,6 +53,26 @@ const CardDescription = React.forwardRef<
 ))
 CardDescription.displayName = "CardDescription"
 
+const CardCode = React.forwardRef<
+  HTMLPreElement,
+  React.HTMLAttributes<HTMLPreElement> & { language?: string }
+>(({ className, language, children, ...props }, ref) => (
+  <pre
+    ref={ref}
+    className={cn(
+      "mx-6 mb-4 overflow-x-auto rounded-lg bg-muted px-4 py-3 font-mono text-sm",
+      className
+    )}
+    {...props}
+  >
+    {language && (
+      <span className="mb-2 block text-xs text-muted-foreground">{language}</span>
+    )}
+    <code>{children}</code>
+  </pre>
+))
+CardCode.displayName = "CardCode"
+
 const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
@@ -73,4 +93,4 @@ const CardFooter = React.forwardRef<
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardCode, CardContent }
