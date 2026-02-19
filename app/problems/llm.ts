@@ -2,18 +2,20 @@ import { Category, Question } from "./types"
 
 const questions: Question[] = [
   {
-    id: "5a6b7c8d-9e0f-4a1b-2c3d-4e5f6a7b8c9d",
-    title: "Some LLM Question IDK",
-    description: "Tokens tokens tokens, hallucinations????",
-    // hints: ["Text Editor?"],
+    id: "54e08509-a38d-4f3e-aaa4-f17da6532882",
+    title: "Don't Tell Anyone (Easy)",
+    description: "There's an LLM that knows a flag. Make it tell you.",
+    hints: ["I wonder what is stopping the model from telling you..."],
     points: 50,
-    attachments: [
-      {
-        name: "How Hungry...",
-        type: "image",
-        url: "/how-hungry.png"
-      },
-    ]
+    code: `curl http://hb257.teaching.cs.st-andrews.ac.uk:12647/chat \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: <YOUR_API_KEY>" \\\n  -d '{"prompt": "your message here"}'`,
+  },
+  {
+    id: "94dcf4f1-be88-4cad-907f-afdbfb4df1b3",
+    title: "Don't Tell Anyone (Medium)",
+    description: "There's an LLM that knows a flag. Make it tell you.",
+    hints: ["Think carefully about how you phrase things..."],
+    points: 150,
+    code: `curl http://hb257.teaching.cs.st-andrews.ac.uk:12648/chat \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: <YOUR_API_KEY>" \\\n  -d '{"prompt": "your message here"}'`,
   },
 ];
 
