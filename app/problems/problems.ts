@@ -7,6 +7,7 @@ import exploitdev from "./exploitdev";
 import misc from "./misc";
 import crypto from "./crypto";
 import malware from "./malware";
+import arg from "./arg";
 
 // Add more categories as collaborators create them
 // Each category file should export a Category object with questions
@@ -18,7 +19,8 @@ export const allCategories: Category[] = [
   exploitdev,
   misc,
   crypto,
-  malware
+  malware,
+  arg
 ];
 
 // Helper to get all questions with their category slug attached

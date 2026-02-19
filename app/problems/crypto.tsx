@@ -3,6 +3,39 @@ import { Category, Question } from "./types"
 
 const questions: Question[] = [
   {
+    id: "d0ded40c-5f47-4668-976d-ad22cf284a0d",
+    title: "The Basics",
+    description: (
+      <div>
+
+        <p>syf kpjjpnrex fimftus ygl hffe jpmgsfv qrg opesyl gev zfgtl pk xtrs hjppv gev
+          lnfgs pct gesytpupjpxz vfugtsofes ygl hffe xprex mtgwz pqft syrl r ygqf ogegxfv
+          sp xfs oz ygevl pe syrl lp myfma rs pcs syf nrlf oge phlftqfl syf kpjjpnrex
+          stcsyl yf nyp tcel re ktpes pk mgt xfsl srtfv zfs yf nyp tcel hfyrev mgt xfsl
+          fiygclsfv yf nyp bcoul pkk mjrkk bcoul sp mpemjclrpe ngt vpfl eps vfsftoref nyp
+          rl trxys pejz nyp rl jfks</p>
+
+        <p>syf kjgx rl syf krtls jfssftl pk fgmy jref hfjpn spxfsyft nrsyre syf tfxcjgt kjgx kptogs</p>
+
+        <p>lcmy nrlvpo r nrjj gvv oz pne gvvrsrpel yftf</p>
+
+        <p>nrlf ofe lufga hfmgclf syfz ygqf lpofsyrex sp lgz kppjl hfmgclf syfz ygqf sp lgz lpofsyrex</p>
+
+        <p>rk zpc myglf snp tghhrsl zpc nrjj mgsmy efrsyft</p>
+
+        <p>lpof ufpujf kffj syf tgre psyftl bcls xfs nfs</p>
+
+        <p>vpxl hgta hcs syf mgtgqge opqfl pe</p>
+
+        <p>pef nyp ljfful nrsy rsmyz hco ngafl nrsy lofjjz krexft</p>
+
+        <p>oge nyp lsgevl pe sprjfs rl yrxy pe ups</p>
+
+      </div>
+    ),
+    points: 20,
+  },
+  {
     id: "57504b47-c80f-4b86-8866-c45c3268887f",
     description: "This MATHEMATICALLY IMPOSSIBLE TO DECRYPT method of encryptying is unbeatable 🤓! You know what!? I'm going to show you my encrypted image!          oh yeah?!?! Take two of them!! Yeah I BET you can't do anything with it 😎. IYKYK 😔✊✌️",
     title: "Cracking the Uncrackable",
@@ -73,7 +106,7 @@ const questions: Question[] = [
         name: "3DES Ciphertext",
         type: "file",
         url: "/rule-of-three.txt"
-      } 
+      }
     ]
   },
   {
@@ -95,7 +128,7 @@ const questions: Question[] = [
                     Then send as a json using: requests.post(url, json = your_json_here)`,
       requestFormat: {
         type: "json",
-        example : '{ "data": "datatoencrypt" }'
+        example: '{ "data": "datatoencrypt" }'
       }
     }
   },
@@ -163,11 +196,7 @@ const questions: Question[] = [
 
                   We also received an anonymous message - "Kenngruppen". Not sure what to do with it...`,
     points: 500,
-    api: {
-      endpoint: "/wetterbericht",
-      method: "GET",
-      description: 'Data returned as a JSON: { "wetterbericht": data }.'
-    }
+    link: "/problems/hour-sixth",
   }
 ]
 

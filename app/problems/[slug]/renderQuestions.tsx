@@ -42,8 +42,6 @@ export default function RenderQuestions({ slug }: { slug: string }) {
                     {question.points} pts • {solveCount} solves
                   </span>
                 </div>
-                <CardDescription className="whitespace-pre-line">{question.description}</CardDescription>
-                {question.code && <CardCode>{question.code}</CardCode>} 
               </CardHeader>
               <CardContent className="space-y-4 mb-4">
                 <QuestionContent question={question} />
@@ -99,6 +97,8 @@ function QuestionContent({ question }: { question: Question }) {
 
   return (
     <>
+      <CardDescription className="whitespace-pre-line">{question.description}</CardDescription>
+      {question.code && <CardCode>{question.code}</CardCode>}
       <Hints hints={question.hints} />
       <Attachments attachments={question.attachments} />
       <ApiDocumentation api={question.api} />
