@@ -20,7 +20,7 @@ def encrypt(plaintext):
         return str(e)
 
 
-@app.route('/aes-oracle', methods=['POST'])
+@app.route('/crypto/tainted-love', methods=['POST'])
 def encrypt_handler():
     try:
         data = request.get_json(force=True, cache=True)

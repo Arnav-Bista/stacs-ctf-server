@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardCode, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { allQuestions } from "../problems";
 import { API, Question } from "../types";
 import { Button } from "@/components/ui/button";
@@ -43,8 +43,8 @@ export default function RenderQuestions({ slug }: { slug: string }) {
                   </span>
                 </div>
                 <CardDescription className="whitespace-pre-line">{question.description}</CardDescription>
+                {question.code && <CardCode>{question.code}</CardCode>} 
               </CardHeader>
-
               <CardContent className="space-y-4 mb-4">
                 <QuestionContent question={question} />
               </CardContent>
@@ -222,7 +222,7 @@ function DownloadButton({ url, label }: { url: string; label: string }) {
     <Button variant="secondary" className="w-full justify-start mt-2" asChild>
       <a href={url} download>
         <Download className="mr-2 h-4 w-4" />
-        {label}
+        <span className="truncate"> {label}</span>
       </a>
     </Button>
   );

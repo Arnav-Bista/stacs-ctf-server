@@ -11,6 +11,7 @@ import json
 app = Flask(__name__)
 
 counter = 0
+flag = b"flag_{use-rngs}" 
 
 def encrypt(plaintext: bytes) -> bytes:
     try:
@@ -33,6 +34,7 @@ def encrypt(plaintext: bytes) -> bytes:
 
 @app.route('/crypto/out-of-passwords', methods=['POST'])
 def encrypt_handler():
+    global flag
     try:
         data = request.get_json(force=True, cache=True)
     except Exception as e:
@@ -45,10 +47,11 @@ def encrypt_handler():
     plaintext_bytes = long_to_bytes(plaintext)
     try:
         result = bytes_to_long(encrypt(plaintext_bytes))
+        ct = bytes_to_long(encrypt(flag))
     except Exception as e:
         return jsonify({"error": str(e), "human-err": "Failed to encrypt."}), 400
 
-    return jsonify({"data": result})
+    return jsonify({"data": result, "flag_ct": ct})
 
 
 if __name__ == "__main__":

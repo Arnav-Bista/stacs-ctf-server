@@ -28,6 +28,7 @@ export type Question = {
   id: string;
   title: ReactNode;
   description: ReactNode;
+  code?: ReactNode;
   hints?: string[] | ReactNode;
   points: number;
   attachments?: Attachment[];

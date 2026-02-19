@@ -11,7 +11,7 @@ import json
 
 app = Flask(__name__)
 
-def encrypt(pt: bytes) -> string, string:
+def encrypt(pt: bytes) -> (str, str):
     flag = b"flag_{dontreuse}"
     key = b'force-of-inertia'
     nonce = get_random_bytes(8)
@@ -27,7 +27,7 @@ def encrypt(pt: bytes) -> string, string:
     return test_ct_b64, ct
 
 
-@app.route('/crypto/out-of-passwords', methods=['POST'])
+@app.route('/crypto/testing-testing', methods=['POST'])
 def encrypt_handler():
     try:
         data = request.get_json(force=True, cache=True)

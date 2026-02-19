@@ -31,6 +31,7 @@ export type Question = {
   category: Category;
   title: string;
   description: string;
+  code?: string;
   hints?: string[];
   points: number;
   attachments?: Attachment[];
