@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -12,5 +13,8 @@ func main() {
 	memServer(mux)
 
 	log.Println("starting")
-	http.ListenAndServe(":8080", mux)
+	err := http.ListenAndServe(os.Getenv("CTF_PORT"), mux)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

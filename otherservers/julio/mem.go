@@ -3,18 +3,36 @@ package main
 import (
 	"log"
 	"bytes"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"os/exec"
 	"strings"
+	"net/url"
 )
 
-const flagMem = "abc"
+const flagMem = "flag_{p00l-on-the-r00f-must-have-a-l3ak}"
 
 func memServer(mux *http.ServeMux) {
+
+	mux.HandleFunc("GET /mem", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, `
+		<!DOCTYPE html>
+		<html>
+		<head>
+		</head>
+		<body>
+			<h1>Please log in</h1>
+			<form action="" method="post">
+				<input name="username" type="text" />
+				<input name="password" type="password" />
+				<input type="submit" />
+			</form>
+		</body>
+		</html>
+		`)
+	})
 
 	mux.HandleFunc("POST /mem", func(w http.ResponseWriter, r *http.Request) {
 
@@ -26,15 +44,18 @@ func memServer(mux *http.ServeMux) {
 		}
 
 		// super fast parsing algorithm
-		byt = bytes.Replace(byt, []byte{'&'}, []byte{0}, -1)
+		parsed, err := url.QueryUnescape(string(bytes.Replace(byt, []byte{'&'}, []byte{0}, -1)))
+		if err != nil {
+			http.Error(w, "Bad request", http.StatusBadRequest)
+			return
+		}
 
-		cmd := exec.Command("./mem", "admin", flagMem)
-		cmd.Stdin = bytes.NewReader(byt)
+		cmd := exec.Command("./julio-mem", "admin", flagMem)
+		cmd.Stdin = strings.NewReader(parsed)
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		err = cmd.Run()
 
-		_ = errors.New
 		log.Println(err)
 
 		if exit, ok := err.(*exec.ExitError); ok {
@@ -54,9 +75,12 @@ func memServer(mux *http.ServeMux) {
 			w.WriteHeader(status[exit.ExitCode()])
 			fmt.Fprintf(w, "%s\n", http.StatusText(status[exit.ExitCode()]))
 			return
-		} else {
+		} else if (err != nil){
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
+		} else {
+			w.WriteHeader(http.StatusOK)
+			fmt.Fprintln(w, "logged in!")
 		}
 
 	})

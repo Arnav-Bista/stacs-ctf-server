@@ -67,6 +67,28 @@ const questions: Question[] = [
     ]
   },
   {
+    id: "302e2189-1fd0-44ed-acb5-65a684fd90af",
+    title: "Buffers v2",
+    description: "Okay maybe turning off the stack protection was bad, well I'm not even gonna try to get better at writing code so I'm gonna use mprotect(.., PROT_NONE) around my allocations to keep you HACKERS out of my server",
+    points: 200,
+    api: {
+      endpoint: "https://jcbg1.teaching.cs.st-andrews.ac.uk/ctf/mem",
+      method: "POST",
+      description: "Send your payload to my C webserver, I even wrote the HTML form parser myself. Don't even think about buffer overflows!",
+      requestFormat: {
+        type: "application/x-www-form-urlencoded",
+        example: 'username=me&password=shhhh'
+      },
+    },
+    attachments: [
+      {
+        name: "Source Code",
+        type: "file",
+        url: "/buffers/buffer2-mprotect.c"
+      }
+    ]
+  },
+  {
     id: "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
     title: "Yes, read my clean thoughts.",
     description: "The admins wants to know your thoughts through commenting. But maybe too much freedom in how you can comment stuff...",
@@ -79,6 +101,20 @@ const questions: Question[] = [
     description: "Someone left the filing cabinet unlocked. Not every document is meant for your eyes — but that's never stopped anyone before.",
     points: 200,
     link: "/problems/paper-trail"
+  },
+  {
+    id: "f56e4c05-f024-4dad-8a10-37cb124e586e",
+    title: "Strong <strike>passwords</strike> usernames",
+    description: "Since I didn't tell anyone my username, surely it's secure. Do you not think I'm a good engineer?",
+    points: 50,
+    link: "https://jcbg1.teaching.cs.st-andrews.ac.uk/ctf/otp/code/your-username"
+  },
+  {
+    id: "6cf36663-df57-473f-8b34-55f5d712efe2",
+    title: "One factor is better than two",
+    description: "Even if you did know my username, my slick new web app skips old boring passwords and lets you login quickly via email. Less friction, more security, What could possibly go wrong?",
+    points: 100,
+    link: "https://jcbg1.teaching.cs.st-andrews.ac.uk/ctf/otp/code/your-username"
   }
 ];
 

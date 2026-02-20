@@ -11,8 +11,8 @@ import (
 	"github.com/google/uuid"
 )
 
-const flagOtp1 = "asd"
-const flagOtp2 = "qwe"
+const flagOtp1 = "flag_{the-plagu3s-carefu11y-prep4red-mem0}"
+const flagOtp2 = "flag_{1f-at-first-u-d0nt-succ3d}"
 
 type otp struct {
 	code string
@@ -77,7 +77,7 @@ func otpServer(mux *http.ServeMux) {
 			<h1>Welcome back, admin</h1>
 			<p>Enter the 6-digit code sent to your email</p>
 			<p>Your quote of the day is: %s</p>
-			<form action="/otp/code/admin?token=%s" method="post">
+			<form action="./admin?token=%s" method="post">
 				<input name="code" type="text" />
 				<input type="submit" />
 			</form>
@@ -116,7 +116,6 @@ func otpServer(mux *http.ServeMux) {
 		</head>
 		<body>
 			<h1>You've logged in</h1>
-			<p>Enter the 6-digit code sent to your email</p>
 			<p>New message from corporate: %s</p>
 		</body>
 		</html>
