@@ -57,7 +57,7 @@ const questions: Question[] = [
   {
     id: "f8197d63-29d8-4400-b4ed-6b10746fe34a",
     title: "Not quite my size",
-    description: "Huh? This flag was supposed to be free but the image is corrupted!\nI remember resizing it so that it had a 16:9 aspect ratio, what's gone wrong?", 
+    description: "Huh? This flag was supposed to be free but the image is corrupted!\nI remember resizing it so that it had a 16:9 aspect ratio, what's gone wrong?",
     points: 50,
     attachments: [
       {
@@ -77,7 +77,7 @@ const questions: Question[] = [
         name: "LSB.png",
         type: "image",
         url: "/LSB.png"
-      },    
+      },
     ]
   },
   {
@@ -90,6 +90,19 @@ const questions: Question[] = [
         name: "cashmoneyy.zip",
         type: "file",
         url: "/cashmoneyy.zip"
+      }
+    ]
+  },
+  {
+    id: "035eb28f-fc95-4f51-86f5-adb45e1238e9",
+    title: "Club Classics",
+    description: "The dub siren is a staple of sound system culture which has spilled into adjacent genres like jungle and UK garage.",
+    points: 50,
+    attachments: [
+      {
+        name: "wheelup.wav",
+        type: "file",
+        url: "/wheelup.wav"
       }
     ]
   },

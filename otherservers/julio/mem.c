@@ -16,7 +16,8 @@ struct field {
 };
 
 int fieldck(struct field f, char * guess) {
-    // printf("fieldck %s %s %s\n", field, actual, guess);
+    printf("fieldck %s %s %s\n", f.field, f.actual, guess);
+
     if (strncmp(f.field, guess, strlen(f.field))) {
         return -1;
     }
@@ -62,17 +63,16 @@ int main(int argn, char ** argv) {
     int ok = 0;
 
     while (cur - buf < n) {
-        int ok = 0;
         for (int i = 0; i < 2; i++) {
             // printf("checking value %s\n", fields[i].actual);
 
             switch (fieldck(fields[i], cur)) {
             case -1:
-                // printf("bad field at %s\n", fields[i].field);
+                printf("bad field at %s\n", fields[i].field);
                 continue;
             case 1:
                 // NOTE: debug only this will segfailt all bad passwords
-                // printf("unauth at %s %s\n", fields[i].field, cur);
+                printf("unauth at %s %s\n", fields[i].field, cur);
                 return STATUS_UNAUTHORIZED;
             case 0:
                 ok++;
@@ -86,6 +86,7 @@ int main(int argn, char ** argv) {
         cur += strlen(cur) + 1;
     }
 
+	printf("ok: %d\n", ok);
     return ok == 2 ? EXIT_SUCCESS : STATUS_UNAUTHORIZED;
 }
 
