@@ -1,0 +1,46 @@
+UUID,Category,Name,Points,Flag
+a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d,Forensics,My Password v1,25,flag_{stringy-stuff-in-my-teeth}
+035eb28f-fc95-4f51-86f5-adb45e1238e9,Forensics,Club Classics,50,?
+3c14b4dc-3149-44bc-b774-f7e59d430ca0,Forensics,OwO what's this?,50,flag_{feeling-zippy-today}
+d7fb88cb-c9b9-43cf-aac0-d18a02854230,Forensics,Doxxed,25,flag_{romania-mentioned}
+f8197d63-29d8-4400-b4ed-6b10746fe34a,Forensics,Not quite my size,100,flag_{just-needed-a-stretch}
+032afa02-f28f-468a-a26d-5b2591a86141,Forensics,Bad trip :0,150,flag_{hope-you-didnt-trip-up}
+638c2889-7071-4c3e-b35a-482d44eadad5,Forensics,My ZIP's bulging??,250,flag_{you-got-a-flag-down-there-or-something}
+bruh,Malware and Cyberwarfare,Sneaky Sneaky Russians,200,flag_{wriggly_wriggly_worm}
+05016ea1-c21a-4d4f-91a7-2a00cf487f64,Exploit Development,The Cookie Monster,25,flag_{zer0_cookie_z3ro_fri3nds_is_just_s4d}
+796e71c0-b390-40f8-b405-6eea7a5df08a,Exploit Development,Small Problems,50,flag_{b1g_plus_b1g_3quals_sm4ll}
+8463c8c7-c0d2-44df-b6e5-b1f7bea55da2,Exploit Development,Cookie Messages,150,flag_{fr33_m3mory_is_ava1labl3_m3mory}
+cdd78a1c-7ee3-4198-bd3c-3d17aee3a888,Exploit Development,Pooling Memory,250,flag_{should_hav3_wr1tten_it_1n_rust}
+9d94d9b8-f91c-4b84-82ce-dbcfa55669db,Exploit Development,Look At Me,500,flag_{I_4m_th3_4dm1n_n0w}
+54e08509-a38d-4f3e-aaa4-f17da6532882,LLM,Don't Tell Anyone (Easy),75,flag_{system_prompts_are_not_secure}
+94dcf4f1-be88-4cad-907f-afdbfb4df1b3,LLM,Don't Tell Anyone (Medium),250,flag_{filters_make_it_harder}
+29caf3be-e9b6-4a32-8f80-3b9ca3be3826,Pen testing,Victim 1,150,flag_{5269-5f9a3c2ca6ffda66c1e1b0f7a39887a8a43eabe8}
+ce162eac-61e0-4a38-9403-9caee41baa9b,Pen testing,Victim 2,250,flag_{CVE-2011-2523-1f94e523be6e8ae3e24fb54aa40e56102d81f0d3}
+694bc6ad-5531-4ca6-9971-f4fcb76fe53f,Pen testing,Victim 3,350,flag_{www-data-648c662b4486c435a676fc6737245d105d1a5685}
+e1979e63-f018-4370-8906-973186f0ad9c,Misc,REDACTED DOCUMENTS,100,flag_{highlighting-does-not-hide-text}
+d0ded40c-5f47-4668-976d-ad22cf284a0d,Cryptography,The Basics,20,flag_{wisdom}
+57504b47-c80f-4b86-8866-c45c3268887f,Cryptography,Cracking the Uncrackable,75,flag_{its-one-time-for-a-reason}
+1924050a-6107-4db5-83bc-8e088b10ffc3,Cryptography,Out of Passwords,50,flag_{use-rngs}
+33e9de1b-d25d-444a-8d41-835e74fc3087,Cryptography,Rule of Two,50,flag_{not-just-a-sith-thing}
+18d1f180-4e53-41ba-bc98-b159c6d9accf,Cryptography,Testing Testing,50,flag_{dontreuse}
+cb1255ca-cd4a-43d2-9395-9ee34af179c5,Cryptography,Rule of 3DES,250,flag_{sometimes-bigger-isnt-better}
+b92be410-a913-45df-9588-bc4b4c3974dd,Cryptography,Tainted Love,250,flag_{soft-cell-reference}
+1d453157-8e13-4675-a353-b9ab6ae5b5c5,Cryptography,NOBUS (Nobody But Us),500,flag_{i-was-snowden-once-had-to-skip-school}
+be2cf98e-a534-4cfa-b4e5-9378ed7f7ae9,Cryptography,Ne comprends pas,100,flag_{man-my-french-sucks}
+64ef2e42-fe95-4794-bb09-75694fa52ac2,Cryptography,Die grossartige Arbeit von Herrn Scherbius,500,flag_{weather-report-goes-brrrr}
+b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e,Engineering,SQLi v1 - Broken Login,25,flag_{sql_injection_was_on_another_short}
+f7a8b9c0-d1e2-4f3a-5b6c-7d8e9f0a1b2c,Engineering,SQLi v2 - My Messages,100,flag_{every-statement-needs-parameters}
+c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f,Engineering,SQLi v3 - My Super Cool Items!,175,flag_{they-can-use-any-attack-vectors!}
+ede6dff9-0936-4a52-8dc7-c705caa8b85c,Engineering,SQLi v4 - The Oracle,400,flag_{timing_is_everything_in_sql}
+d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a,Engineering,Buffers v1,50,flag_{h0td0g_0verfl0ws_the_bun}
+5ad271a3-cb3b-4e4f-8169-a7aa0c53c30a,Engineering,Buffers v2,150,flag_{y0u_ch4ng3d_my_m1nd}
+302e2189-1fd0-44ed-acb5-65a684fd90af,Engineering,Buffers v3,300,flag_{p00l-on-the-r00f-must-have-a-l3ak}
+6179193a-5287-4a75-b55e-e01a2cddcb13,Engineering,Buffers v4,500,flag_{r3turn_0riented_pr0gramming_g0es_brrr}
+e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b,Engineering,Yes read my clean thoughts,150,flag_{xss_cookie_monster_nom_nom}
+2804906d-dfc9-445e-b0dc-0a94a75823fb,Engineering,Paper Trail,350,flag{jwt_role_escalation_granted}
+f56e4c05-f024-4dad-8a10-37cb124e586e,Engineering,Strong usernames,50,flag_{the-plagu3s-carefu11y-prep4red-mem0}
+6cf36663-df57-473f-8b34-55f5d712efe2,Engineering,One factor is better than two,150,flag_{et_tu_brute}
+5a6b7c8d-9e0f-491b-2c3d-4e5f6a7b8c9d,ARG,The Beginning,0,?
+5a6b7c8d-9e0f-491b-353d-4e5f6a7b8c9d,ARG,The Middle,0,?
+5a6b7c8d-9e0f-491b-3c3d-4e5f637b8c9d,ARG,The Middle 2 Electric Bogalooo,0,?
+5a6b7c8d-9e0f-431b-3c3d-4e5f6a7b8c9d,ARG,The End,250,flag_{the-friends-we-made-along-the-way}

@@ -2,8 +2,8 @@
 #include <string.h>
 
 int main() {
-  printf("Good luck bypassing an impossible if statement!\n");
-  printf("Btw, do you like pineapples on pizza?\n");
+  printf("Welcome to the most secure survey in Scotland!\n");
+  printf("Is a hotdog a sandwich? (yes/no)\n");
 
   int hackerman = 0;
   char buffer[100];
@@ -12,14 +12,13 @@ int main() {
   printf("%d\n", hackerman);
 
   if (strcmp(buffer, "yes") == 0) {
-    printf("I've let the italian mafia know.\n");
+    printf("Bold choice. The philosophers will hear of this.\n");
   } else {
-    printf("You're safe for now...\n");
+    printf("Coward. But fair enough.\n");
   }
 
   if (hackerman) {
-    printf("You've leveled up to a level 2 crook!");
-    printf("Here is your flag: XXXXXXXXXXXXXXXXXXXXXX\n");
+    printf("Wait... how did you do that?!\n");
+    printf("Here is your flag: XXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
   }
 }
-

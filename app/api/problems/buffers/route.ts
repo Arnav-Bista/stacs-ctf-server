@@ -32,10 +32,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const validQuestions = ["buffers1", "buffers2", "buffers3"];
+    const validQuestions = ["buffers1", "buffers2", "buffers3", "buffers4"];
     if (!validQuestions.includes(payload.question)) {
       return NextResponse.json(
-        { error: "Invalid question. Must be one of: buffers1, buffers2, buffers3" },
+        { error: "Invalid question. Must be one of: buffers1, buffers2, buffers3, buffers4" },
         { status: 400 }
       );
     }

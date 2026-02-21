@@ -39,7 +39,7 @@ const questions: Question[] = [
     id: "57504b47-c80f-4b86-8866-c45c3268887f",
     description: "This MATHEMATICALLY IMPOSSIBLE TO DECRYPT method of encryptying is unbeatable 🤓! You know what!? I'm going to show you my encrypted image!          oh yeah?!?! Take two of them!! Yeah I BET you can't do anything with it 😎. IYKYK 😔✊✌️",
     title: "Cracking the Uncrackable",
-    points: 25,
+    points: 75,
     attachments: [
       {
         name: "The First",
@@ -204,7 +204,7 @@ const questions: Question[] = [
 
 const crypto: Category = {
   questions: questions,
-  description: "TODO",
+  description: "Break ciphers, exploit weak keys, and crack encryption schemes spanning classical to modern cryptography.",
   category: "Cryptography",
 }
 

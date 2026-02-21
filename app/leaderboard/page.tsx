@@ -136,6 +136,9 @@ export default function LeaderboardPage() {
 
   const transformedData = transformData(rawData).sort((a, b) => b.data[b.data.length - 1].count - a.data[a.data.length - 1].count);
 
+  const dataStart = rawData.length > 0 ? new Date(rawData[0].found_at).getTime() : null;
+  const dataEnd = rawData.length > 0 ? new Date(rawData[rawData.length - 1].found_at).getTime() : null;
+
   return (
     <div className='flex flex-col p-8'>
       <div className='flex gap-4 items-center'>
@@ -156,17 +159,13 @@ export default function LeaderboardPage() {
               </DialogDescription>
             </DialogHeader>
             <p>
-              We heard you! We&apos;ve made a new scoring system for the CTF. Each flag has a set amount of <strong>POINTS</strong>. 
+              Each flag has a base <strong>POINTS</strong> value set by the challenge author. Your final score for a flag depends on when your team captures it relative to other teams.
             </p>
             <p>
-              This is allocated based on the difficult we think the problem is. However, a problem that we find hard might be really easy for you and vice versa.
+              The <strong>first</strong> team to find a flag earns <strong>1.25×</strong> the base points. The <strong>second</strong> team gets <strong>1.10×</strong>, the <strong>third</strong> gets <strong>1.05×</strong>, and everyone else gets the full base points (<strong>1.0×</strong>).
             </p>
             <p>
-              Now for each flag, we keep track of how many teams also captured it. Then the real score for you is going to be given by <strong>POINTS</strong> * (100 / num_found).
-            </p>
-
-            <p>
-              This means if you&apos;re the only one that found a flag, you get 100× the base points. But if 100 teams found it, you only get 1× the base points. So harder problems—ones fewer teams solve—are worth way more
+              So speed matters — the faster you find a flag, the bigger your bonus. Good luck!
             </p>
           </DialogContent>
         </Dialog>
@@ -179,8 +178,8 @@ export default function LeaderboardPage() {
           <Leaderboard
             data={transformedData}
             standings={standings}
-            startTime={config?.start ?? new Date("2025-02-15T15:00:00").getTime()}
-            endTime={config?.end ?? new Date("2025-02-15T21:00:00").getTime()}
+            startTime={config?.start ?? dataStart ?? new Date("2026-02-21T13:00:00").getTime()}
+            endTime={config?.end ?? dataEnd ?? new Date("2026-02-21T17:00:00").getTime()}
           />
       }
     </div>

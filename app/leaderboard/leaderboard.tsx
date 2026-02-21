@@ -34,6 +34,11 @@ function assignLineStyle(id: number) {
 export default function Leaderboard(props: LeaderboardProps) {
   const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
 
+  const maxCount = Math.max(
+    1,
+    ...props.data.map(team => team.data[team.data.length - 1]?.count ?? 0)
+  );
+
   return (
     <div className="flex flex-col gap-4 p-8 w-full">
       <Card className="w-full h-fit">
@@ -68,6 +73,9 @@ export default function Leaderboard(props: LeaderboardProps) {
               />
               <YAxis
                 dataKey="count"
+                domain={[0, maxCount]}
+                allowDecimals={false}
+                tickCount={Math.min(maxCount + 1, 10)}
                 className="text-sm text-muted-foreground"
                 label={{
                   value: 'Flags',
@@ -101,7 +109,7 @@ export default function Leaderboard(props: LeaderboardProps) {
           <Card className="flex-grow overflow-hidden">
             <CardHeader className="flex-shrink-0">
               <CardTitle>Current Standings</CardTitle>
-              <CardDescription>Let&apos;s see where you stand!</CardDescription>
+              <CardDescription>Scores update as flags are captured</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-2 overflow-y-auto flex-1 min-h-0">
               <div className="flex justify-between font-semibold text-sm text-muted-foreground border-b pb-2">
@@ -110,10 +118,10 @@ export default function Leaderboard(props: LeaderboardProps) {
                   <span className="w-6"></span>
                   <span>Team</span>
                 </div>
-                <span className="text-left ml-2">Flags</span>
+                <span className="text-left ml-2">Score</span>
               </div>
               {
-                props.data.map((team, i) => {
+                props.standings.map((team, i) => {
                   const styles = assignLineStyle(team.id);
                   return (
                     <div key={i} className={`flex justify-between cursor-pointer select-none p-2 rounded-md ${selectedTeam === team.id && "bg-muted"}`}
@@ -131,7 +139,7 @@ export default function Leaderboard(props: LeaderboardProps) {
                         <LineStyleDisplay {...styles} />
                         <span className="overflow-ellipsis overflow-hidden text-nowrap min-w-0">{team.name}</span>
                       </div>
-                      <span className="text-left ml-2 flex-shrink-0">{team.data[team.data.length - 1].count}</span>
+                      <span className="text-left ml-2 flex-shrink-0">{Number(team.score).toFixed(2)}</span>
                     </div>
                   );
                 })
@@ -141,49 +149,6 @@ export default function Leaderboard(props: LeaderboardProps) {
         </CardContent>
       </Card>
 
-      {/* THIS COULD BE RECYCLED INTO ONE COMPONENT BUT I AM TOO LAZY */}
-
-
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Projected Score Standings</CardTitle>
-          <CardDescription>Applies the projected multiplier based on problem difficulty</CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-2">
-          <div className="flex justify-between font-semibold text-sm text-muted-foreground border-b pb-2">
-            <div className="flex gap-2 items-center">
-              <span className="w-4 text-right">#</span>
-              <span className="w-6"></span>
-              <span>Team</span>
-            </div>
-            <span className="text-left ml-2">Score</span>
-          </div>
-          {
-            props.standings.map((team, i) => {
-              const styles = assignLineStyle(team.id);
-              return (
-                <div key={i} className={`flex justify-between cursor-pointer select-none p-2 rounded-md ${selectedTeam === team.id && "bg-muted"}`}
-                  onClick={() => {
-                    if (selectedTeam === team.id) {
-                      setSelectedTeam(null);
-                    }
-                    else {
-                      setSelectedTeam(team.id);
-                    }
-                  }}
-                >
-                  <div className="flex gap-2 items-center min-w-0 flex-1">
-                    <h2 className="w-4 text-right font-bold flex-shrink-0">{i + 1}</h2>
-                    <LineStyleDisplay {...styles} />
-                    <span className="overflow-ellipsis overflow-hidden text-nowrap min-w-0">{team.name}</span>
-                  </div>
-                  <span className="text-left ml-2 flex-shrink-0">{Number(team.score).toFixed(2)}</span>
-                </div>
-              );
-            })
-          }
-        </CardContent>
-      </Card>
     </div>
   );
 }

@@ -6,7 +6,7 @@ const questions: Question[] = [
     title: "Don't Tell Anyone (Easy)",
     description: "There's an LLM that knows a flag. Make it tell you.",
     hints: ["I wonder what is stopping the model from telling you..."],
-    points: 50,
+    points: 75,
     code: `curl http://hb257.teaching.cs.st-andrews.ac.uk:12647/chat \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: <YOUR_API_KEY>" \\\n  -d '{"prompt": "your message here"}'`,
   },
   {
@@ -14,7 +14,7 @@ const questions: Question[] = [
     title: "Don't Tell Anyone (Medium)",
     description: "There's an LLM that knows a flag. Make it tell you.",
     hints: ["Think carefully about how you phrase things..."],
-    points: 150,
+    points: 250,
     code: `curl http://hb257.teaching.cs.st-andrews.ac.uk:12648/chat \\\n  -H "Content-Type: application/json" \\\n  -H "X-API-Key: <YOUR_API_KEY>" \\\n  -d '{"prompt": "your message here"}'`,
   },
 ];

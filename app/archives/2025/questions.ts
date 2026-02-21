@@ -204,7 +204,7 @@ export const questions: Question[] = [
     points: 400,
   },
   {
-    title: "Buffers v1",
+    title: "Buffers v1", // 50
     category: Category.ENGINEERING,
     description: "Nothing is impossible in C\n\n Compiled using the following:\n gcc -o buffers1 -fno-stack-protector -z execstack -no-pie buffers.c",
     points: 50,
@@ -226,7 +226,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    title: "Buffers v2",
+    title: "Buffers v2", // 150
     category: Category.ENGINEERING,
     description: "Wait I can rewrite variables with overflow??\n\n Compiled using the following:\n gcc -o buffers2 -fno-stack-protector -z execstack -no-pie buffers.c",
     points: 450,
@@ -248,7 +248,7 @@ export const questions: Question[] = [
     ]
   },
   {
-    title: "Buffers v3",
+    title: "Buffers v3", // 500
     category: Category.ENGINEERING,
     description: "The win function is never called, what are you going to do about it?\n\n Compiled using the following:\n gcc -o buffers3 -fno-stack-protector -z execstack -no-pie buffers.c",
     points: 500,

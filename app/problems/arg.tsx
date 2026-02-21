@@ -84,7 +84,81 @@ SS
   {
     id: "5a6b7c8d-9e0f-491b-3c3d-4e5f637b8c9d",
     title: "The Middle 2 Electric Bogalooo",
-    description: "",
+    description: (
+      <p>
+        <strong>Excerpt from Sir Edwin's Diary</strong>
+        <br />
+        <br />
+
+        Heare I sitte, broken of spirite,
+        <br />
+        Mine bowels promised what they dared not write.
+        <br />
+        A throne of stone, a kingdom small,
+        <br />
+        Yet nought descendeth — nothing at all.
+        <br />
+        <br />
+
+        Now hear me, pilgrim, thou who reads
+        <br />
+        These words whilst tending to thy needs:
+        <br />
+        A path there lies beyond this wall,
+        <br />
+        But first, the riddle of the stall.
+        <br />
+        <br />
+
+        Three knights rode forth from Londontowne,
+        <br />
+        The first bore pepper, wore a crown.
+        <br />
+        The second carried leaf of bay,
+        <br />
+        The third bore turmeric, gold as day.
+        <br />
+        <br />
+
+        They sought a witch of Eastern lore,
+        <br />
+        Who stirred a cauldron none ignore.
+        <br />
+        She hath no name in Western tongue,
+        <br />
+        But every traveller hath her sung.
+        <br />
+        <br />
+
+        Cry out — but not in vain, dear friend,
+        <br />
+        Append the sound that doth not end.
+        <br />
+        When hounds give chase, they rush, they scurry —
+        <br />
+        Remove the head and what's the flurry?
+        <br />
+        <br />
+
+        What word unites the riders three
+        <br />
+        With what the witch doth brew for thee?
+        <br />
+        Speak not aloud — inscribe the path,
+        <br />
+        A slash before, then face the wrath.
+        <br />
+        <br />
+
+        For he who sitteth here too long
+        <br />
+        Shall never hear the pilgrim's song.
+        <br />
+        Rise now, and seek — thy quest won't tarry.
+        <br />
+        The answer waits beyond the —
+      </p>
+    ),
     // hints: ["Text Editor?"],
     points: 0,
     lockedPassword: "load 500",
