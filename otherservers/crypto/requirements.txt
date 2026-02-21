@@ -1,0 +1,4 @@
+pycryptodome
+flask
+py-enigma
+

@@ -78,7 +78,7 @@ SS
     ),
     // hints: ["Text Editor?"],
     points: 0,
-    lockedPassword: "load 500",
+    lockedPassword: "JP 77",
     lockedHint: "The previous answer"
   },
   {
@@ -161,16 +161,16 @@ SS
     ),
     // hints: ["Text Editor?"],
     points: 0,
-    lockedPassword: "load 500",
+    lockedPassword: "nomadic-monad",
     lockedHint: "The previous answer"
   },
   {
     id: "5a6b7c8d-9e0f-431b-3c3d-4e5f6a7b8c9d",
     title: "The End",
-    description: "",
+    description: "We want you to take a photo of you/your team, recreating a famous meme, goofy pose, anything! We just want some memories and a good laugh.\n\nCome show us and we'll give you a flag.",
     // hints: ["Text Editor?"],
-    points: 250,
-    lockedPassword: "load 500",
+    points: 400,
+    lockedPassword: "endofunctor",
     lockedHint: "The previous answer"
   },
 ];
