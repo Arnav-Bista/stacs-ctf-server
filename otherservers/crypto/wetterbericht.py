@@ -12,6 +12,12 @@ machine = EnigmaMachine.from_key_sheet(
 )
 
 
+def xor_to_alpha(s, t):
+    result = []
+    for a, b in zip(s.encode(), t.encode()):
+        result.append(chr((a ^ b) % 26 + ord('A')))
+    return ''.join(result)
+    
 def encrypt(init_rotors, pt, key):
     # set rotor positions, then encrypt
     machine.set_display(init_rotors)
@@ -39,6 +45,9 @@ def transmit(pt, key="STA", init_rotors="STA"):
     time = datetime.now().strftime("%H%M")
     init_rotors = strxor(init_rotors.encode(),time[1:4].encode()).decode().upper()
     key = strxor(key.encode(),time[1:4].encode()).decode().upper()
+
+    init_rotors = xor_to_alpha(init_rotors, time[1:4])
+    key = xor_to_alpha(init_rotors, time[1:4])
     
     ct, e_key = encrypt(init_rotors, pt, key)
     
