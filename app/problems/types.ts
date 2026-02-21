@@ -13,7 +13,7 @@ export interface Attachment {
 }
 
 export interface RequestFormat {
-  type: 'json' | 'text' | 'binary';
+  type: 'json' | 'text' | 'binary' | ReactNode;
   example?: string;
 }
 
