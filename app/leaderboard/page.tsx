@@ -94,7 +94,13 @@ export default function LeaderboardPage() {
   const [config, setConfig] = useState<CtfConfig | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isHost, setIsHost] = useState(false);
   const lastDataId = useRef(0);
+    
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsHost(localStorage.getItem('host') === 'true')
+  }, [])
 
   useEffect(() => {
     async function initialize() {
@@ -170,6 +176,11 @@ export default function LeaderboardPage() {
           </DialogContent>
         </Dialog>
       </div>
+      {isHost && (
+        <div className='mx-auto text-4xl font-bold mt-8'>
+          ab556.teaching.cs.st-andrews.ac.uk
+        </div>
+      )}
       {
         isLoading ?
           <div className='w-full h-[80vh] flex items-center justify-center'>
