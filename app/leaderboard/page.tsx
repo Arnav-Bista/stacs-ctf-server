@@ -178,7 +178,7 @@ export default function LeaderboardPage() {
       </div>
       {isHost && (
         <div className='mx-auto text-4xl font-bold mt-8'>
-          ab556.teaching.cs.st-andrews.ac.uk
+          hb257.teaching.cs.st-andrews.ac.uk
         </div>
       )}
       {
